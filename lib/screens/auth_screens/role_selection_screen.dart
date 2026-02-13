@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:gap/gap.dart';
+import 'package:pecan_construction/core/constant/app_icons.dart';
+import 'package:pecan_construction/core/constant/app_images.dart';
 import 'package:sizer/sizer.dart';
 
 import '../../core/widgets/app_text.dart';
@@ -23,26 +26,28 @@ class RoleSelectionScreen extends GetView<RoleSelectionController> {
         child: Padding(
           padding: const EdgeInsets.fromLTRB(16, 16, 16, 18),
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Gap(20.h),
+              //
               AppText(
                 "Choose your role",
                 color: primary,
                 fontSize: 20,
                 fontWeight: FontWeight.w800,
               ),
-              const Gap(6),
+              Gap(18.h),
+              SizedBox(
+                width: 80.w,
+                height: 10.h,
+                child: Image.asset(AppImages.logoImage, fit: BoxFit.contain,),
+              ),
+              Gap(10.h),
               AppText(
                 "Select one option to continue",
                 color: secondary,
                 fontSize: 13,
                 fontWeight: FontWeight.w600,
               ),
-
-              const Gap(18),
-
+              Gap(1.h),
               Obx(() {
                 final selected = controller.selectedRole.value;
 

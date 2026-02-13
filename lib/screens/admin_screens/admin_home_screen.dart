@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:pecan_construction/config/routes/routes.dart';
 import 'package:pecan_construction/config/routes/routes_name.dart';
 import 'package:sizer/sizer.dart';
 import 'package:pecan_construction/core/widgets/app_text.dart'; // if you want to use AppText

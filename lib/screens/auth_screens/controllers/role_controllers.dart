@@ -20,7 +20,7 @@ class RoleSelectionController extends GetxController {
     if (role == AppRoleType.admin) {
       Get.offAllNamed(RoutesName.login); // change to your route
     } else {
-      Get.offAllNamed(""); //  change to your route
+      Get.offAllNamed(RoutesName.EmployeeBottomNavScreen); //  change to your route
     }
   }
 }

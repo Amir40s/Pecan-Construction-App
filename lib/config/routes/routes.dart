@@ -1,5 +1,8 @@
 import 'package:get/get.dart';
+import 'package:pecan_construction/config/bindings/EmployeeSiteBinding.dart';
 import 'package:pecan_construction/config/bindings/assignEmployeBinding.dart';
+import 'package:pecan_construction/config/bindings/employ_bottom_navBindings.dart';
+import 'package:pecan_construction/config/bindings/employee_notificationBinding.dart';
 import 'package:pecan_construction/config/bindings/notification_binding.dart';
 import 'package:pecan_construction/config/bindings/role_binding.dart';
 import 'package:pecan_construction/config/routes/routes_name.dart';
@@ -16,8 +19,18 @@ import '../../screens/admin_screens/create_site_screen.dart';
 import '../../screens/admin_screens/setting_screens.dart';
 import '../../screens/admin_screens/site_details_screen.dart';
 import '../../screens/auth_screens/role_selection_screen.dart';
+import '../../screens/employ_screens/bottom_nav_screen.dart';
+import '../../screens/employ_screens/employ_home_screens.dart';
+import '../../screens/employ_screens/employe_notification_screen.dart';
+import '../../screens/employ_screens/employee_attaichment_screen.dart';
+import '../../screens/employ_screens/employee_setting_screen.dart';
+import '../../screens/employ_screens/employee_site_details.dart';
+import '../../screens/employ_screens/employee_site_screen.dart';
 import '../bindings/add_attaichment_binding.dart';
 import '../bindings/app_bindings.dart';
+import '../bindings/employ_attaichmentBinding.dart';
+import '../bindings/employee_home_binding.dart';
+import '../bindings/employee_site_details_binding.dart';
 
 class AppRoutes {
 
@@ -53,6 +66,33 @@ class AppRoutes {
     GetPage(name: RoutesName.RoleSelectionScreen,
       page:() =>  RoleSelectionScreen(),
       binding: RoleSelectionBinding(),
+    ),
+    GetPage(name: RoutesName.EmployeeBottomNavScreen,
+      page:() =>  EmployeeBottomNavScreen(),
+      binding: EmployeeBottomBinding(),
+    ),
+    GetPage(name: RoutesName.EmployeeHomeScreen,
+      page:() =>  EmployHomeScreens(),
+      binding: EmployeeHomeBinding(),
+    ),
+    GetPage(name: RoutesName.EmployeeSitesScreen,
+      page:() =>  EmployeeSitesScreen(),
+      binding: EmployeeSiteBinding(),
+    ),
+    GetPage(name: RoutesName.AttachmentsScreen,
+      page:() =>  AttachmentsScreen(),
+      binding: AttachmentsBinding(),
+    ),
+    GetPage(name: RoutesName.EmployeeSiteDetailsScreen,
+      page:() =>  EmployeeSiteDetailsScreen(),
+      binding: EmployeeSiteDetailsBinding()
+    ),
+    GetPage(name: RoutesName.EmployeeSettingScreen,
+        page:() =>  EmployeeSettingScreen(),
+    ),
+    GetPage(name: RoutesName.EmployeNotificationScreen,
+      page:() =>  EmployeNotificationScreen(),
+      binding: EmployeeNotificationBinding()
     ),
   ];
 }

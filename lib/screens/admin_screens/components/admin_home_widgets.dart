@@ -74,9 +74,9 @@ class MonthHeaderRow extends StatelessWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                _pill("${c.monthLabel}"),
+                _pill("${c.monthLabel}", Icons.arrow_drop_down),
                 const SizedBox(width: 10),
-                _pill("${c.yearLabel}"),
+                _pill("${c.yearLabel}", Icons.arrow_drop_down),
               ],
             ),
           ),
@@ -90,16 +90,24 @@ class MonthHeaderRow extends StatelessWidget {
     });
   }
 
-  Widget _pill(String text) {
+  Widget _pill(String text, IconData icon) {
     return Container(
+      width: 30.w,
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
       decoration: BoxDecoration(
-        color: const Color(0xffF2F2F2),
+        color:  Colors.white,
+        border: BoxBorder.all(color: Colors.grey.shade300),
         borderRadius: BorderRadius.circular(10),
       ),
-      child: Text(
-        text,
-        style: const TextStyle(fontWeight: FontWeight.w600),
+      child: Row(
+        children: [
+          Text(
+            text,
+            style: const TextStyle(fontWeight: FontWeight.w600),
+          ),
+          Spacer(),
+          Icon(icon,),
+        ],
       ),
     );
   }
@@ -199,7 +207,7 @@ class ActiveSitesHeader extends StatelessWidget {
     return Row(
       children: [
         Text(
-          "Active Sites ($count)",
+          "Assigned Sites ($count)",
           style: TextStyle(fontSize: 15, fontWeight: FontWeight.w700),
         ),
         const Spacer(),
@@ -284,8 +292,8 @@ class SiteCard extends StatelessWidget {
             borderRadius: BorderRadius.circular(12),
             child: Image.asset(
               site.imagePath,
-              height: 98,
-              width: 93,
+              height: 12.h,
+              width: 27.w,
               fit: BoxFit.cover,
             ),
           ),
