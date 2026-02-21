@@ -5,6 +5,7 @@ import 'package:pecan_construction/config/bindings/employ_bottom_navBindings.dar
 import 'package:pecan_construction/config/bindings/employee_notificationBinding.dart';
 import 'package:pecan_construction/config/bindings/notification_binding.dart';
 import 'package:pecan_construction/config/bindings/role_binding.dart';
+import 'package:pecan_construction/config/bindings/signUpBindings.dart';
 import 'package:pecan_construction/config/routes/routes_name.dart';
 import 'package:pecan_construction/screens/auth_screens/controllers/role_controllers.dart';
 import 'package:pecan_construction/screens/auth_screens/forget_password_screens.dart';
@@ -20,12 +21,15 @@ import '../../screens/admin_screens/setting_screens.dart';
 import '../../screens/admin_screens/site_details_screen.dart';
 import '../../screens/auth_screens/role_selection_screen.dart';
 import '../../screens/employ_screens/bottom_nav_screen.dart';
+import '../../screens/employ_screens/contact_admin_screen.dart';
 import '../../screens/employ_screens/employ_home_screens.dart';
 import '../../screens/employ_screens/employe_notification_screen.dart';
 import '../../screens/employ_screens/employee_attaichment_screen.dart';
 import '../../screens/employ_screens/employee_setting_screen.dart';
 import '../../screens/employ_screens/employee_site_details.dart';
 import '../../screens/employ_screens/employee_site_screen.dart';
+import '../../screens/employ_screens/privacy_policy.dart';
+import '../../screens/employ_screens/term_and_conditions.dart';
 import '../bindings/add_attaichment_binding.dart';
 import '../bindings/app_bindings.dart';
 import '../bindings/employ_attaichmentBinding.dart';
@@ -40,12 +44,17 @@ class AppRoutes {
     GetPage(name: RoutesName.login,
         page:() =>  SigninScreen()),
     GetPage(name: RoutesName.signup,
-        page:() =>  SignUpScreens()),
+        page:() =>  SignUpScreens(),
+      binding: SignUpBinding()
+   ),
     GetPage(name: RoutesName.forgotPassword,
         page:() =>  ForgetPasswordScreens()),
+
     GetPage(name: RoutesName.BottomNavScreen,
         page:() =>  BottomNavScreen(),
     binding: NotificationBinding()),
+
+
     GetPage(name: RoutesName.CreateSiteScreen,
         page:() =>  CreateSiteScreen(),
         binding: createSiteControllerBinding()),
@@ -93,6 +102,15 @@ class AppRoutes {
     GetPage(name: RoutesName.EmployeNotificationScreen,
       page:() =>  EmployeNotificationScreen(),
       binding: EmployeeNotificationBinding()
+    ),
+    GetPage(name: RoutesName.PrivacyPolicyScreen,
+      page:() =>  PrivacyPolicyScreen(),
+    ),
+    GetPage(name: RoutesName.TermsConditionsScreen,
+      page:() =>  TermsConditionsScreen(),
+    ),
+    GetPage(name: RoutesName.ContactAdminScreen,
+      page:() =>  ContactAdminScreen(),
     ),
   ];
 }

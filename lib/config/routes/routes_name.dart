@@ -1,3 +1,6 @@
+import 'package:pecan_construction/screens/employ_screens/privacy_policy.dart';
+import 'package:pecan_construction/screens/employ_screens/term_and_conditions.dart';
+
 class RoutesName {
 
   static const splash = '/';
@@ -22,5 +25,9 @@ class RoutesName {
   static const EmployeeSiteDetailsScreen = '/EmployeeSiteDetailsScreen';
   static const EmployeeSettingScreen = '/EmployeeSettingScreen';
   static const EmployeNotificationScreen = '/EmployeNotificationScreen';
+
+  static const PrivacyPolicyScreen = '/PrivacyPolicyScreen';
+  static const TermsConditionsScreen = '/TermsConditionsScreen';
+  static const ContactAdminScreen = '/ContactAdminScreen';
 
 }

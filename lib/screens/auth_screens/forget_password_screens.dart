@@ -82,7 +82,11 @@ class ForgetPasswordScreens extends StatelessWidget {
                         children: [
                           AppText("Return to",fontWeight: FontWeight.w800,fontSize: 14,),
                           SizedBox(width: 1.w,),
-                          AppText("Sign In", fontWeight: FontWeight.w900,fontSize: 15,color: Color(0xffC22522),)
+                          InkWell(
+                            onTap: (){
+                              Navigator.of(context).pop();
+                            },
+                              child: AppText("Sign In", fontWeight: FontWeight.w900,fontSize: 15,color: Color(0xffC22522),))
                         ],
                       ),
 

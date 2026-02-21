@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gap/gap.dart';
+import 'package:get/get.dart';
+import 'package:pecan_construction/config/routes/routes_name.dart';
 import 'package:pecan_construction/core/constant/app_icons.dart';
 import 'package:pecan_construction/core/widgets/app_buttons.dart';
 import 'package:pecan_construction/core/widgets/header_widget.dart';
@@ -13,12 +15,10 @@ class EmployeeSettingScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final bg = const Color(0xFFF6F7FB);
-    final card = Colors.white;
-    final border = const Color(0xFFE5E7EB);
-    final textPrimary = const Color(0xFF111827);
-    final textSecondary = const Color(0xFF6B7280);
-    final red = const Color(0xFFB91C1C);
     bool isNotification = false;
+
+
+
     return Scaffold(
       backgroundColor: bg,
       body: SafeArea(
@@ -105,22 +105,27 @@ class EmployeeSettingScreen extends StatelessWidget {
                 fontWeight: FontWeight.w700,
               ),
               const Gap(10),
-              Container(
-                width: 95.w,
-                height: 7.h,
-                padding: EdgeInsets.symmetric(horizontal: 12),
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(12),
-                    border: BoxBorder.all(color: Colors.grey.shade300)
-                ),
-                child: Row(
-                  children: [
-                    SvgPicture.asset(AppIcons.messageIcon),
-                    Gap(3.w),
-                    AppText("Contact Admin",  color: Colors.black87,fontWeight: FontWeight.bold,),
-                    Spacer(),
-                    Icon(Icons.arrow_forward_ios_rounded)
-                  ],
+              GestureDetector(
+                onTap: (){
+                  Get.toNamed(RoutesName.ContactAdminScreen);
+                },
+                child: Container(
+                  width: 95.w,
+                  height: 7.h,
+                  padding: EdgeInsets.symmetric(horizontal: 12),
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(12),
+                      border: BoxBorder.all(color: Colors.grey.shade300)
+                  ),
+                  child: Row(
+                    children: [
+                      SvgPicture.asset(AppIcons.messageIcon),
+                      Gap(3.w),
+                      AppText("Contact Admin",  color: Colors.black87,fontWeight: FontWeight.bold,),
+                      Spacer(),
+                      Icon(Icons.arrow_forward_ios_rounded)
+                    ],
+                  ),
                 ),
               ),
 
@@ -134,41 +139,51 @@ class EmployeeSettingScreen extends StatelessWidget {
                 fontWeight: FontWeight.w700,
               ),
               const Gap(10),
-              Container(
-                width: 95.w,
-                height: 7.h,
-                padding: EdgeInsets.symmetric(horizontal: 12),
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(12),
-                    border: BoxBorder.all(color: Colors.grey.shade300)
-                ),
-                child: Row(
-                  children: [
-                    SvgPicture.asset(AppIcons.privacyIcon),
-                    Gap(3.w),
-                    AppText("Privacy Policy",  color: Colors.black87,fontWeight: FontWeight.bold,),
-                    Spacer(),
-                    Icon(Icons.arrow_forward_ios_rounded)
-                  ],
+              GestureDetector(
+                onTap: (){
+                  Get.toNamed(RoutesName.PrivacyPolicyScreen);
+                },
+                child: Container(
+                  width: 95.w,
+                  height: 7.h,
+                  padding: EdgeInsets.symmetric(horizontal: 12),
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(12),
+                      border: BoxBorder.all(color: Colors.grey.shade300)
+                  ),
+                  child: Row(
+                    children: [
+                      SvgPicture.asset(AppIcons.privacyIcon),
+                      Gap(3.w),
+                      AppText("Privacy Policy",  color: Colors.black87,fontWeight: FontWeight.bold,),
+                      Spacer(),
+                      Icon(Icons.arrow_forward_ios_rounded)
+                    ],
+                  ),
                 ),
               ),
               Gap(12),
-              Container(
-                width: 95.w,
-                height: 7.h,
-                padding: EdgeInsets.symmetric(horizontal: 12),
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(12),
-                    border: BoxBorder.all(color: Colors.grey.shade300)
-                ),
-                child: Row(
-                  children: [
-                    SvgPicture.asset(AppIcons.termCondtionIcon),
-                    Gap(3.w),
-                    AppText("Terms and Condition",  color: Colors.black87,fontWeight: FontWeight.bold,),
-                    Spacer(),
-                    Icon(Icons.arrow_forward_ios_rounded)
-                  ],
+              GestureDetector(
+                onTap: (){
+                  Get.toNamed(RoutesName.TermsConditionsScreen);
+                },
+                child: Container(
+                  width: 95.w,
+                  height: 7.h,
+                  padding: EdgeInsets.symmetric(horizontal: 12),
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(12),
+                      border: BoxBorder.all(color: Colors.grey.shade300)
+                  ),
+                  child: Row(
+                    children: [
+                      SvgPicture.asset(AppIcons.termCondtionIcon),
+                      Gap(3.w),
+                      AppText("Terms and Condition",  color: Colors.black87,fontWeight: FontWeight.bold,),
+                      Spacer(),
+                      Icon(Icons.arrow_forward_ios_rounded)
+                    ],
+                  ),
                 ),
               ),
 
