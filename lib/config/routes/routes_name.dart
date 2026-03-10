@@ -14,7 +14,9 @@ class RoutesName {
   static const SiteDetailsScreen = '/SiteDetailsScreen';
   static const SettingsScreen = '/SettingsScreen';
   static const RoleSelectionScreen = '/RoleSelectionScreen';
-
+  static const adminLoginScreen = '/adminLoginScreen';
+  static const ProfileScreen = '/ProfileScreen';
+  static const SiteDetailsScreen_2 = '/SiteDetailsScreen_2';
 
 
   ////employee screeens
@@ -29,5 +31,6 @@ class RoutesName {
   static const PrivacyPolicyScreen = '/PrivacyPolicyScreen';
   static const TermsConditionsScreen = '/TermsConditionsScreen';
   static const ContactAdminScreen = '/ContactAdminScreen';
+
 
 }

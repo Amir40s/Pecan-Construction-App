@@ -4,6 +4,7 @@ import 'package:pecan_construction/config/routes/routes_name.dart';
 import 'package:pecan_construction/core/widgets/app_text.dart';
 import 'package:sizer/sizer.dart';
 import '../../core/models/site_model.dart';
+import '../../core/widgets/appnetworkImage.dart';
 import 'admin_controller/admin_home_controller.dart';
 
 
@@ -25,8 +26,8 @@ class SiteScreen extends StatelessWidget {
               // Top Row: Title + Plus
               Row(
                 children: [
-                  const Expanded(
-                    child: AppText( "Construction Sites",fontSize: 20,fontWeight: FontWeight.w600,)
+                   Expanded(
+                    child: AppText(  "construction_sites".tr,fontSize: 20,fontWeight: FontWeight.w600,)
                   ),
                   Container(
                     height: 30,
@@ -59,17 +60,24 @@ class SiteScreen extends StatelessWidget {
               // List
               Expanded(
                 child: Obx(() {
+                  if (c.isLoadingSites.value) {
+                    return const Center(child: CircularProgressIndicator());
+                  }
+
                   final list = c.filteredSites;
+
+                  if (list.isEmpty) {
+                    return  Center(
+                      child: Text( "no_sites_found".tr,),
+                    );
+                  }
                   return ListView.builder(
                     itemCount: list.length,
                     itemBuilder: (context, i) {
                       return _SiteCard(
                         site: list[i],
                         onVisit: () {
-                          // TODO: open site detail
-                        },
-                        onInfo: () {
-                          // TODO: info dialog
+                          Get.toNamed(RoutesName.SiteDetailsScreen_2, arguments: list[i].siteId);
                         },
                       );
                     },
@@ -95,11 +103,9 @@ class _Tabs extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        _tab("All Sites", SiteTab.all),
-        // const SizedBox(width: 18),
-        _tab("Active", SiteTab.active),
-        // const SizedBox(width: 18),
-        _tab("Completed", SiteTab.completed),
+        _tab("all_sites".tr, SiteTab.all),
+        _tab("active".tr, SiteTab.active),
+        _tab("completed".tr, SiteTab.completed),
       ],
     );
   }
@@ -136,20 +142,18 @@ class _Tabs extends StatelessWidget {
 }
 
 class _SiteCard extends StatelessWidget {
-  final SiteModel site;
+  final SitesModel site;
   final VoidCallback onVisit;
-  final VoidCallback onInfo;
 
   const _SiteCard({
     required this.site,
     required this.onVisit,
-    required this.onInfo,
+
   });
 
   @override
   Widget build(BuildContext context) {
-    final isCompleted = site.status == SiteStatus.completed;
-
+    final isCompleted = site.siteStatus.trim().toLowerCase() == "completed";
     return Container(
       padding: const EdgeInsets.all(12),
       margin: const EdgeInsets.only(bottom: 12),
@@ -177,7 +181,7 @@ class _SiteCard extends StatelessWidget {
                     ),
                     const SizedBox(width: 6),
                     Text(
-                      site.progressText,
+                      site.siteStatus,
                       style: const TextStyle(
                         fontSize: 11,
                         fontWeight: FontWeight.w600,
@@ -189,7 +193,7 @@ class _SiteCard extends StatelessWidget {
                 const SizedBox(height: 6),
 
                 Text(
-                  site.title,
+                  site.siteName,
                   style: const TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.w800,
@@ -198,7 +202,9 @@ class _SiteCard extends StatelessWidget {
                 ),
                 const SizedBox(height: 4),
                 Text(
-                  site.subTitle,
+                  site.siteNote.toString(),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
                   style: const TextStyle(
                     fontSize: 14,
                     fontWeight: FontWeight.w600,
@@ -220,27 +226,13 @@ class _SiteCard extends StatelessWidget {
                           ),
                         ),
                         onPressed: onVisit,
-                        child: const Text(
-                          "Visit Site",
+                        child:  Text(
+                          "visit_site".tr,
                           style: TextStyle(
                             color: Color(0xffC22522),
                             fontWeight: FontWeight.w800,
                           ),
                         ),
-                      ),
-                    ),
-                    const SizedBox(width: 10),
-                    InkWell(
-                      onTap: onInfo,
-                      borderRadius: BorderRadius.circular(10),
-                      child: Container(
-                        height: 34,
-                        width: 34,
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        child: const Icon(Icons.info_outline, size: 18),
                       ),
                     ),
                   ],
@@ -253,12 +245,15 @@ class _SiteCard extends StatelessWidget {
 
           ClipRRect(
             borderRadius: BorderRadius.circular(12),
-            child: Image.asset(
-              site.imagePath,
-              height: 13.h,
-              width: 30.w,
-              fit: BoxFit.cover,
-            ),
+            child: AppNetworkImage(
+              url: site.sitePhoto,
+              isCircle: false,
+              width: 25.w,
+              height: 25.w,
+              placeholderAsset: "",
+              borderWidth: 3,
+              borderColor: Colors.white,
+            )
           ),
         ],
       ),

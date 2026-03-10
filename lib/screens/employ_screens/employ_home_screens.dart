@@ -1,223 +1,282 @@
+import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 import 'package:pecan_construction/config/routes/routes_name.dart';
 import 'package:pecan_construction/core/widgets/app_buttons.dart';
+import 'package:pecan_construction/screens/auth_screens/controllers/signup_controller.dart';
 import 'package:sizer/sizer.dart';
-
+import '../../core/constant/app_images.dart';
+import '../../core/localizations/locale_controller.dart';
 import '../../core/widgets/app_text.dart';
-import '../admin_screens/components/admin_home_widgets.dart';
+import '../../core/widgets/appnetworkImage.dart';
 import 'components/employee_home_screen_components.dart';
 import 'controllers/employee_home_controller.dart';
 
 class EmployHomeScreens extends GetView<EmployeeHomeController> {
-  const EmployHomeScreens({super.key});
+  EmployHomeScreens({super.key});
+  final profileController = Get.put(SignUpController());
+  final localeController = Get.find<LocaleController>();
 
   @override
   Widget build(BuildContext context) {
-    // NOTE: controller will come from Binding (recommended)
-    // If you are not using binding yet, you can uncomment:
-    // final c = Get.put(EmployeeHomeController());
     final c = controller;
-
     return Scaffold(
       backgroundColor: Colors.grey.shade50,
-      body: SingleChildScrollView(
-        child: SafeArea(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 12),
-            child: Column(
-              children: [
-                /// Top Header
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 12),
-                  child: Row(
-                    children: [
-                      Obx(
-                        () => Container(
-                          height: 9.h,
-                          width: 12.w,
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            image: DecorationImage(
-                              image: AssetImage(c.profileImage.value),
-                              fit: BoxFit.contain,
-                            ),
+      body: RefreshIndicator(
+        onRefresh: () => controller.watchMySites(),
+        child: SingleChildScrollView(
+          physics: const AlwaysScrollableScrollPhysics(),
+          child: SafeArea(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 12),
+              child: Column(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 12),
+                    child: Row(
+                      children: [
+                        Obx(() => AppNetworkImage(
+                              url: profileController.avatarUrl.value,
+                              isCircle: true,
+                              width: 14.w,
+                              height: 14.w,
+                              placeholderAsset: AppImages.profileImage,
+                              borderWidth: 3,
+                              borderColor: Colors.white,
+                            )),
+                        SizedBox(width: 3.w),
+                        Obx(
+                          () => Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              AppText(
+                                "welcome".tr,
+                                fontSize: 12,
+                                fontWeight: FontWeight.w600,
+                                color: const Color(0xff979796),
+                              ),
+                              AppText(
+                                profileController.employeeName.value,
+                                fontSize: 20,
+                                fontWeight: FontWeight.w700,
+                                color: Colors.black87,
+                              ),
+                            ],
                           ),
                         ),
-                      ),
-                      SizedBox(width: 3.w),
-                      Obx(
-                        () => Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            AppText(
-                              c.welcomeText.value,
-                              fontSize: 12,
-                              fontWeight: FontWeight.w600,
-                              color: const Color(0xff979796),
-                            ),
-                            AppText(
-                              c.adminName.value,
-                              fontSize: 20,
-                              fontWeight: FontWeight.w700,
-                              color: Colors.black87,
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-
-                const SizedBox(height: 10),
-                const Divider(height: 1),
-
-                /// Day/Week/Month Tabs
-                Padding(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 12,
-                    vertical: 12,
-                  ),
-                  child: EmployeeCalendarViewTabs(c: c),
-                ),
-
-                /// Calendar Box
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 6),
-                  child: Container(
-                    padding: const EdgeInsets.all(12),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      border: Border.all(color: const Color(0xffEAEAEA)),
-                      borderRadius: BorderRadius.circular(14),
-                    ),
-                    child: Column(
-                      children: [
-                        EmployeeMonthHeaderRow(c: c),
-                        const SizedBox(height: 6),
-                        EmployeeMonthCalendarGrid(c: c),
                       ],
                     ),
                   ),
-                ),
+                  const SizedBox(height: 10),
+                  const Divider(height: 1),
+                  Padding(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 12,
+                        vertical: 12,
+                      ),
+                      child: Container()
+                      // EmployeeCalendarViewTabs(c: c),
+                      ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 6),
+                    child: Container(
+                      padding: const EdgeInsets.all(12),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        border: Border.all(color: const Color(0xffEAEAEA)),
+                        borderRadius: BorderRadius.circular(14),
+                      ),
+                      child: Column(
+                        children: [
+                          EmployeeMonthHeaderRow(c: c),
+                          const SizedBox(height: 6),
+                          EmployeeMonthCalendarGrid(c: c),
+                        ],
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 14),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 12),
+                    child: Obx(() {
+                      if (c.isLoading.value) {
+                        return const Center(
+                          child: Padding(
+                            padding: EdgeInsets.all(20.0),
+                            child: CircularProgressIndicator(),
+                          ),
+                        );
+                      }
+                      if (c.errorText.isNotEmpty) {
+                        return Center(
+                          child: Padding(
+                            padding: const EdgeInsets.all(20.0),
+                            child: Text(
+                              c.errorText.value,
+                              textAlign: TextAlign.center,
+                              style: const TextStyle(color: Colors.red),
+                            ),
+                          ),
+                        );
+                      }
+                      if (c.sites.isEmpty) {
+                        return  Center(
+                          child: Padding(
+                            padding: EdgeInsets.all(20.0),
+                            child: Text("no_sites_assigned".tr),
+                          ),
+                        );
+                      }
+                      return Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          AppText(
+                            "${"assigned_sites".tr} (${c.sites.length})",
+                            fontSize: 16,
+                            fontWeight: FontWeight.w800,
+                          ),
+                          const SizedBox(height: 8),
+                          Obx(() {
+                            controller.refreshTrigger.value;
+                            return ListView.builder(
+                              physics: const NeverScrollableScrollPhysics(),
+                              shrinkWrap: true,
+                              itemCount: c.filteredSites.length,
+                              itemBuilder: (context, index) {
+                                final s = c.filteredSites[index];
+                                final isVisited = c.isSiteViewed(s.siteId);
 
-                const SizedBox(height: 14),
-
-                /// Active Sites Header
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 12),
-                  child: Obx(() {
-                    if (c.sites.isEmpty) {
-                      return SizedBox.shrink();
-                    }
-                    return Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        AppText(
-                          "Assigned Sites (${c.sites.length})",
-                          fontSize: 16,
-                          fontWeight: FontWeight.w800,
-                        ),
-                        ListView.builder(
-                          physics: NeverScrollableScrollPhysics(),
-                          shrinkWrap: true,
-                          itemCount: c.sites.length,
-                          itemBuilder: (context, index) {
-                            final site = c.sites[index];
-                            return Container(
-                              width: 95.w,
-                              height: 15.h,
-                              margin: EdgeInsets.symmetric(vertical: 8),
-                              padding: EdgeInsets.all(8),
-                              decoration: BoxDecoration(
-                                color: Colors.white,
-                                borderRadius: BorderRadius.circular(20),
-                                border: BoxBorder.all(
-                                  color: Colors.grey.shade300,
-                                ),
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: Colors.grey.shade300,
-                                    blurRadius: 2,
-                                  )
-                                ]
-                              ),
-                              child: Row(
-                                children: [
-                                  Expanded(
-                                    flex: 2,
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Gap(1.h),
-                                        AppText(
-                                          overflow: TextOverflow.ellipsis,
-                                          maxLines: 1,
-                                          site.title,
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.w800,
-                                        ),
-                                        Gap(0.5.h),
-                                        AppText(
-                                          site.subtitle,
-                                          fontSize: 14,
-                                          fontWeight: FontWeight.w600,
-                                          color: Colors.grey.shade600,
-                                        ),
-                                        Gap(1.5.h),
-                                        Row(
+                                final buttonText = isVisited ? "resume".tr : "check_in".tr;
+                                return Container(
+                                  width: 95.w,
+                                  height: 15.h,
+                                  margin:
+                                      const EdgeInsets.symmetric(vertical: 8),
+                                  padding: const EdgeInsets.all(8),
+                                  decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    borderRadius: BorderRadius.circular(20),
+                                    border:
+                                        Border.all(color: Colors.grey.shade300),
+                                    boxShadow: [
+                                      BoxShadow(
+                                        color: Colors.grey.shade300,
+                                        blurRadius: 2,
+                                      ),
+                                    ],
+                                  ),
+                                  child: Row(
+                                    children: [
+                                      Expanded(
+                                        flex: 2,
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
                                           children: [
-                                            AppButtonWidget(
-                                              onPressed: (){
-                                                Get.toNamed(RoutesName.EmployeeSiteDetailsScreen);
-                                              },
-                                              text: site.buttonText,
-                                              width: 30.w,
-                                              height: 4.h,
-                                              buttonColor:
-                                                  site.buttonText == "Resume"
-                                                  ? Color(0xffF2CFCE)
-                                                  : Color(0xffC22522),
+                                            Gap(1.h),
+                                            AppText(
+                                              s.siteName,
+                                              overflow: TextOverflow.ellipsis,
+                                              maxLines: 1,
+                                              fontSize: 16,
+                                              fontWeight: FontWeight.w800,
                                             ),
                                             Gap(0.5.h),
-                                            AppButtonWidget(
-                                              text: "!",
-                                              width: 10.w,
-                                              height: 4.h,
-                                              buttonColor: Color(0xffDADADA),
-                                              textColor: Colors.black87,
-                                              fontSize: 23,
+                                            AppText(
+                                              (s.siteDescription!),
+
+                                              fontSize: 14,
+                                              fontWeight: FontWeight.w600,
+                                              color: Colors.grey.shade600,
+                                              overflow: TextOverflow.ellipsis,
+                                              maxLines: 1,
+                                            ),
+                                            Gap(1.5.h),
+                                            Row(
+                                              children: [
+
+                                  AppButtonWidget(
+                                  onPressed: () {
+                                log(s.siteId);
+
+                                if (!isVisited) {
+                                c.markSiteViewed(s.siteId);
+                                }
+
+                                Get.toNamed(
+                                RoutesName.EmployeeSiteDetailsScreen,
+                                arguments: {"siteId": s.siteId},
+                                );
+                                },
+                                  text: buttonText,
+                                  width: 30.w,
+                                  height: 4.h,
+                                  buttonColor: isVisited
+                                      ? const Color(0xffF2CFCE)
+                                      : const Color(0xffC22522),
+                                ),
+                                                Gap(0.5.h),
+                                              ],
                                             ),
                                           ],
                                         ),
-                                      ],
-                                    ),
-                                  ),
-                                  Gap(0.5.h),
-                                  Expanded(
-                                    flex:1,
-                                    child: Container(
-                                       height: 120,
-                                      decoration: BoxDecoration(
-                                        border: Border.all(color: Colors.grey.shade300),
-                                        borderRadius: BorderRadius.circular(12),
-                                        image: DecorationImage(image: AssetImage(site.imageAsset), fit: BoxFit.cover)
                                       ),
-                                    ),
-                                  )
-                                ],
-                              ),
+                                      Gap(0.5.h),
+                                      Expanded(
+                                        flex: 1,
+                                        child: ClipRRect(
+                                          borderRadius:
+                                              BorderRadius.circular(12),
+                                          child: (s.sitePhoto != null &&
+                                                  s.sitePhoto!
+                                                      .trim()
+                                                      .isNotEmpty)
+                                              ? Image.network(
+                                                  s.sitePhoto!,
+                                                  height: 120,
+                                                  fit: BoxFit.cover,
+                                                  errorBuilder: (_, __, ___) =>
+                                                      Container(
+                                                    height: 120,
+                                                    color: Colors.grey.shade200,
+                                                    alignment: Alignment.center,
+                                                    child: const Icon(Icons
+                                                        .image_not_supported),
+                                                  ),
+                                                )
+                                              : Container(
+                                                  height: 120,
+                                                  decoration: BoxDecoration(
+                                                    border: Border.all(
+                                                        color: Colors
+                                                            .grey.shade300),
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            12),
+                                                    image:
+                                                        const DecorationImage(
+                                                      image: AssetImage(
+                                                          "assets/images/site_thumb.png"),
+                                                      fit: BoxFit.cover,
+                                                    ),
+                                                  ),
+                                                ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                );
+                              },
                             );
-                          },
-                        ),
-                      ],
-                    );
-                  }),
-                ),
-                const SizedBox(height: 16),
-              ],
+                          })
+                        ],
+                      );
+                    }),
+                  ),
+                  const SizedBox(height: 16),
+                ],
+              ),
             ),
           ),
         ),

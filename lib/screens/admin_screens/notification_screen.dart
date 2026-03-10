@@ -29,7 +29,7 @@ class NotificationScreen extends GetView<NotificationController> {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16),
               child: AppText(
-                "Notification",
+                "notifications".tr,
                 color: textPrimary,
                 fontSize: 18,
                 fontWeight: FontWeight.w800,
@@ -53,10 +53,10 @@ class NotificationScreen extends GetView<NotificationController> {
                 labelStyle: const TextStyle(fontWeight: FontWeight.w800, fontSize: 13),
                 unselectedLabelStyle:
                 const TextStyle(fontWeight: FontWeight.w700, fontSize: 13),
-                tabs: const [
-                  Tab(text: "All"),
-                  Tab(text: "Reminders"),
-                  Tab(text: "Updates"),
+                tabs: [
+                  Tab(text: "all".tr),
+                  Tab(text: "reminders".tr),
+                  Tab(text: "updates".tr),
                 ],
               ),
             ),

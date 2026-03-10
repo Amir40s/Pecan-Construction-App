@@ -24,56 +24,67 @@ class CreateSiteScreen extends GetView<CreateSiteController> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                CustomHeader(title: "Create New Site", showBack: true),
+                CustomHeader(title: "create_new_site".tr, showBack: true),
                 SizedBox(height: 1.h),
                 AppText(
-                  "Add Site Photo",
+                  "add_site_photo".tr,
                   fontSize: 14,
                   fontWeight: FontWeight.w700,
                   color: Colors.black,
                 ),
                 SizedBox(height: 1.h),
-                Container(
-                  width: 95.w,
-                  height: 30.h,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(20),
-                    border: BoxBorder.all(color: Colors.grey.shade300),
+                Obx(() => InkWell(
+                  onTap: () {
+                    controller.pickMainImageFromGallery();
+                  },
+                  child: Container(
+                    width: 95.w,
+                    height: 30.h,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(20),
+                      border: Border.all(color: Colors.grey.shade300),
+                    ),
+                    clipBehavior: Clip.antiAlias,
+                    child: controller.selectedSiteImage.value != null
+                        ? Image.file(
+                      controller.selectedSiteImage.value!,
+                      fit: BoxFit.cover,
+                    )
+                        : Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(
+                          Icons.camera_alt_rounded,
+                          size: 90,
+                          color: Colors.grey.shade300,
+                        ),
+                        AppText(
+                          "upload_photo_hint".tr,
+                          fontWeight: FontWeight.w400,
+                          fontSize: 14,
+                          color: Colors.grey.shade600,
+                        ),
+                      ],
+                    ),
                   ),
-                  child: Column(
-                    children: [
-                      SizedBox(height: 7.h),
-                      Icon(
-                        Icons.camera_alt_rounded,
-                        size: 90,
-                        color: Colors.grey.shade300,
-                      ),
-                      AppText(
-                        "Drag and Drop or Tap to Upload a Photo",
-                        fontWeight: FontWeight.w400,
-                        fontSize: 14,
-                        color: Colors.grey.shade600,
-                      ),
-                    ],
-                  ),
-                ),
+                )),
                 SizedBox(height: 2.h),
                 AppText(
-                  "Site Name",
+                  "site_name".tr,
                   fontSize: 16,
                   fontWeight: FontWeight.w800,
                   color: Colors.black,
                 ),
                 SizedBox(height: 1.h),
                 AppFormField(
-                  title: "site name",
+                  title:"site_name_hint".tr,
                   textEditingController: controller.siteNameC,
                   showBorder: true,
                   borderColor: Colors.grey.shade300,
                 ),
                 SizedBox(height: 2.h),
                 AppText(
-                  "Address",
+                  "address".tr,
                   fontSize: 16,
                   fontWeight: FontWeight.w800,
                   color: Colors.black,
@@ -81,30 +92,32 @@ class CreateSiteScreen extends GetView<CreateSiteController> {
                 SizedBox(height: 1.h),
                 AppFormField(
                   iconWidget: SvgPicture.asset(AppIcons.pointLocationIcon),
-                  title: "site address",
+                  title: "site_address_hint".tr,
                   textEditingController: controller.siteAddressC,
                   showBorder: true,
                   borderColor: Colors.grey.shade300,
                 ),
                 SizedBox(height: 2.h),
                 AppText(
-                  "Start Date",
+                  "start_date".tr,
                   fontSize: 16,
                   fontWeight: FontWeight.w800,
                   color: Colors.black,
                 ),
                 SizedBox(height: 1.h),
                 AppFormField(
+                  readOnly: true,
+                  onTap: () => controller.pickDate(context),
                   iconWidget: SvgPicture.asset(AppIcons.calenderIcon),
-                  textEditingController: controller.siteDateC,
-                  title: "start date",
+                  textEditingController: controller.selectedStartDate,
+                  title: "start_date_hint".tr,
                   showBorder: true,
                   borderColor: Colors.grey.shade300,
                 ),
                 SizedBox(height: 2.h),
 
                 AppText(
-                  "Status",
+                  "status".tr,
                   fontSize: 16,
                   fontWeight: FontWeight.w800,
                   color: Colors.black,
@@ -113,8 +126,8 @@ class CreateSiteScreen extends GetView<CreateSiteController> {
                 AppFormField(
                   readOnly: true,
                   icon: Icons.arrow_drop_down,
-                  textEditingController: controller.siteStatus,
-                  title: "Active",
+                  textEditingController: controller.selectedStatus,
+                  title:"active".tr,
                   showBorder: true,
                   borderColor: Colors.grey.shade300,
 
@@ -126,30 +139,26 @@ class CreateSiteScreen extends GetView<CreateSiteController> {
                 SizedBox(height: 2.h),
 
                 AppText(
-                  "Add Note",
+                  "add_note".tr,
                   fontSize: 16,
                   fontWeight: FontWeight.w800,
                   color: Colors.black,
                 ),
                 SizedBox(height: 1.h),
-                Container(
-                  width: 95.w,
-                  height: 20.h,
-                  padding: EdgeInsets.all(12),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(20),
-                    border: BoxBorder.all(color: Colors.grey.shade300),
-                  ),
-                  child: Text("Add a note"),
+                AppFormField(
+                  title:"add_note".tr,
+                  textEditingController: controller.siteNoteC,
+                  showBorder: true,
+                  borderColor: Colors.grey.shade300,
                 ),
                 SizedBox(height: 2.h),
                 AppButtonWidget(
                   onPressed: (){
-                    Get.toNamed(RoutesName.AssignEmployeeScreen);
+                    Get.toNamed(RoutesName.AddAttachmentScreen);
                   },
                   fontSize: 16,
                   fontWeight: FontWeight.w800,
-                  text: "Next",
+                  text: "next".tr,
                   width: 94.w,
                   height: 6.h,
                   buttonColor: Color(0xffC22522),
@@ -162,7 +171,9 @@ class CreateSiteScreen extends GetView<CreateSiteController> {
     );
   }
   void _showStatusDropdown(BuildContext context) {
-    final List<String> statusList = ["Active", "Completed", "Pause"];
+    final List<String> statusList = [ "active".tr,
+      "completed".tr,
+      "paused".tr];
 
     showModalBottomSheet(
       context: context,
@@ -179,7 +190,7 @@ class CreateSiteScreen extends GetView<CreateSiteController> {
             return ListTile(
               title: Text(value),
               onTap: () {
-                controller.siteStatus.text = value; // set selected
+                controller.selectedStatus.text = value; // set selected
                 Navigator.pop(context);
               },
             );

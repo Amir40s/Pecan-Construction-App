@@ -7,10 +7,14 @@ import 'package:pecan_construction/core/constant/app_icons.dart';
 import 'package:pecan_construction/core/widgets/app_buttons.dart';
 import 'package:pecan_construction/core/widgets/header_widget.dart';
 import 'package:sizer/sizer.dart';
-import '../../core/widgets/app_text.dart'; // <-- your AppText
+import '../../core/localizations/locale_controller.dart';
+import '../../core/widgets/app_text.dart';
+import '../employ_screens/controllers/notification_setting_controller.dart'; // <-- your AppText
 
 class SettingsScreen extends StatelessWidget {
-  const SettingsScreen({super.key});
+   SettingsScreen({super.key});
+
+  final notificationController = Get.put(NotificationSettingController());
 
   @override
   Widget build(BuildContext context) {
@@ -26,13 +30,15 @@ class SettingsScreen extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               // Header
-           CustomHeader(title: "Setting", showBack: true,),
-
+              CustomHeader(
+                title: "settings".tr,
+                showBack: true,
+              ),
               const Gap(18),
 
               // App Setting title
               AppText(
-                "App Setting",
+                "app_settings".tr,
                 color: Colors.black87,
                 fontSize: 16,
                 fontWeight: FontWeight.w700,
@@ -50,45 +56,59 @@ class SettingsScreen extends StatelessWidget {
                   children: [
                     SvgPicture.asset(AppIcons.bellIcon),
                     Gap(3.w),
-                    AppText("Notifications",color: Colors.black87,fontWeight: FontWeight.bold,),
-                    Spacer(),
-                    Switch(
-                      value: isNotification,
-                      onChanged: (value) {
-                        isNotification = value;
-                      },
-                      thumbColor: MaterialStateProperty.all(Colors.white), // thumb white
-                      activeTrackColor: Colors.red, // active track red
-                      inactiveTrackColor: Colors.red.withOpacity(0.35), // inactive slightly red
-                      trackOutlineColor: MaterialStateProperty.all(Colors.transparent), // remove border (Flutter 3.13+)
-                    ),
+                    AppText(
+                      "notifications".tr,
+                      color: Colors.black87,
+                      fontWeight: FontWeight.bold,
+                    ),                      Spacer(),
+                    Obx(() => Switch(
+                      value: notificationController.isNotificationEnabled.value,
+                      onChanged: notificationController.toggleNotification,
+                      thumbColor: MaterialStateProperty.all(Colors.white),
+                      activeTrackColor: Colors.red,
+                      inactiveTrackColor: Colors.red.withOpacity(0.35),
+                      trackOutlineColor: MaterialStateProperty.all(Colors.transparent),
+                    ))
 
                   ],
                 ),
               ),
               const Gap(10),
-              Container(
-                width: 95.w,
-                height: 7.h,
-                padding: EdgeInsets.symmetric(horizontal: 12),
-                decoration: BoxDecoration(
+              GestureDetector(
+                onTap: () {
+                  showLanguageDialog(context);
+                },
+                child: Container(
+                  width: 95.w,
+                  height: 7.h,
+                  padding: const EdgeInsets.symmetric(horizontal: 12),
+                  decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(12),
-                    border: BoxBorder.all(color: Colors.grey.shade300)
-                ),
-                child: Row(
-                  children: [
-                    SvgPicture.asset(AppIcons.languageIcon),
-                    Gap(3.w),
-                    AppText("Language",  color: Colors.black87,fontWeight: FontWeight.bold,),
-                    Spacer(),
-                    Row(
-                      children: [
-                        AppText("English", color: Colors.grey.shade600,),
-                        Icon(Icons.arrow_forward_ios_rounded)
-                      ],
-                    )
-
-                  ],
+                    border: Border.all(color: Colors.grey.shade300),
+                  ),
+                  child: Row(
+                    children: [
+                      SvgPicture.asset(AppIcons.languageIcon),
+                      Gap(3.w),
+                      AppText(
+                        "language".tr,
+                        color: Colors.black87,
+                        fontWeight: FontWeight.bold,
+                      ),
+                      const Spacer(),
+                      Row(
+                        children: [
+                          AppText(
+                            Get.locale?.languageCode == "de"
+                                ? "german".tr
+                                : "english".tr,
+                            color: Colors.grey.shade600,
+                          ),
+                          const Icon(Icons.arrow_forward_ios_rounded),
+                        ],
+                      )
+                    ],
+                  ),
                 ),
               ),
 
@@ -96,29 +116,36 @@ class SettingsScreen extends StatelessWidget {
 
               // Support title
               AppText(
-                "Support",
+                "support".tr,
                 color: Colors.black87,
                 fontSize: 16,
-
                 fontWeight: FontWeight.w700,
               ),
               const Gap(10),
-              Container(
-                width: 95.w,
-                height: 7.h,
-                padding: EdgeInsets.symmetric(horizontal: 12),
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(12),
-                    border: BoxBorder.all(color: Colors.grey.shade300)
-                ),
-                child: Row(
-                  children: [
-                    SvgPicture.asset(AppIcons.messageIcon),
-                    Gap(3.w),
-                    AppText("Contact Admin",  color: Colors.black87,fontWeight: FontWeight.bold,),
-                    Spacer(),
-                    Icon(Icons.arrow_forward_ios_rounded)
-                  ],
+              GestureDetector(
+                onTap: (){
+                  Get.toNamed(RoutesName.ContactAdminScreen);
+                },
+                child: Container(
+                  width: 95.w,
+                  height: 7.h,
+                  padding: EdgeInsets.symmetric(horizontal: 12),
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(12),
+                      border: BoxBorder.all(color: Colors.grey.shade300)
+                  ),
+                  child: Row(
+                    children: [
+                      SvgPicture.asset(AppIcons.messageIcon),
+                      Gap(3.w),
+                      AppText(
+                        "contact_admin".tr,
+                        color: Colors.black87,
+                        fontWeight: FontWeight.bold,
+                      ),                      Spacer(),
+                      Icon(Icons.arrow_forward_ios_rounded)
+                    ],
+                  ),
                 ),
               ),
 
@@ -126,13 +153,13 @@ class SettingsScreen extends StatelessWidget {
 
               // Legal title
               AppText(
-                "Legal",
+                "legal".tr,
                 color: Colors.black87,
                 fontSize: 16,
                 fontWeight: FontWeight.w700,
               ),
               const Gap(10),
-              InkWell(
+              GestureDetector(
                 onTap: (){
                   Get.toNamed(RoutesName.PrivacyPolicyScreen);
                 },
@@ -148,15 +175,18 @@ class SettingsScreen extends StatelessWidget {
                     children: [
                       SvgPicture.asset(AppIcons.privacyIcon),
                       Gap(3.w),
-                      AppText("Privacy Policy",  color: Colors.black87,fontWeight: FontWeight.bold,),
-                      Spacer(),
+                      AppText(
+                        "privacy_policy".tr,
+                        color: Colors.black87,
+                        fontWeight: FontWeight.bold,
+                      ),                      Spacer(),
                       Icon(Icons.arrow_forward_ios_rounded)
                     ],
                   ),
                 ),
               ),
               Gap(12),
-              InkWell(
+              GestureDetector(
                 onTap: (){
                   Get.toNamed(RoutesName.TermsConditionsScreen);
                 },
@@ -172,8 +202,11 @@ class SettingsScreen extends StatelessWidget {
                     children: [
                       SvgPicture.asset(AppIcons.termCondtionIcon),
                       Gap(3.w),
-                      AppText("Terms and Condition",  color: Colors.black87,fontWeight: FontWeight.bold,),
-                      Spacer(),
+                      AppText(
+                        "terms_conditions".tr,
+                        color: Colors.black87,
+                        fontWeight: FontWeight.bold,
+                      ),                      Spacer(),
                       Icon(Icons.arrow_forward_ios_rounded)
                     ],
                   ),
@@ -193,13 +226,79 @@ class SettingsScreen extends StatelessWidget {
                   width: 95.w,
                   height: 6.h,
                   buttonColor: Color(0xffC22522),
-                  text: "Log Out"),
+                text: "logout".tr,),
             ],
           ),
         ),
       ),
     );
   }
+   void showLanguageDialog(BuildContext context) {
+     final localeController = Get.find<LocaleController>();
+
+     Get.bottomSheet(
+       Container(
+         decoration: const BoxDecoration(
+           color: Colors.white,
+           borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+         ),
+         padding: const EdgeInsets.symmetric(vertical: 20),
+         child: Column(
+           mainAxisSize: MainAxisSize.min,
+           children: [
+
+             /// Title
+             AppText(
+               "select_language".tr,
+               fontSize: 18,
+               fontWeight: FontWeight.w800,
+             ),
+
+             const SizedBox(height: 16),
+
+             /// English
+             ListTile(
+               leading: const Icon(Icons.language),
+               title: AppText("english".tr),
+               trailing: Get.locale?.languageCode == "en"
+                   ? const Icon(Icons.check, color: Colors.red)
+                   : null,
+               onTap: () {
+                 localeController.changeLanguage("en");
+                 Get.back();
+               },
+             ),
+
+             /// German
+             ListTile(
+               leading: const Icon(Icons.language),
+               title: AppText("german".tr),
+               trailing: Get.locale?.languageCode == "de"
+                   ? const Icon(Icons.check, color: Colors.red)
+                   : null,
+               onTap: () {
+                 localeController.changeLanguage("de");
+                 Get.back();
+               },
+             ),
+
+             const SizedBox(height: 10),
+
+             /// Cancel
+             TextButton(
+               onPressed: () => Get.back(),
+               child: AppText(
+                 "cancel".tr,
+                 color: Colors.red,
+                 fontWeight: FontWeight.w700,
+               ),
+             )
+           ],
+         ),
+       ),
+     );
+   }
+
 }
 
 /* -------------------- Pieces -------------------- */

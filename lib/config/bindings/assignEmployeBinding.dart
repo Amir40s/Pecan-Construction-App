@@ -7,5 +7,4 @@ class AssignEmployeeBinding extends Bindings {
     Get.put<AssignEmployeeController>(AssignEmployeeController(), permanent: true);
   }
 
-
 }

@@ -5,12 +5,16 @@ import 'package:pecan_construction/core/constant/app_icons.dart';
 import 'package:pecan_construction/core/widgets/header_widget.dart';
 import 'package:sizer/sizer.dart';
 
+import '../../core/models/attaichment_model.dart';
 import '../../core/widgets/app_text.dart';
+import '../../core/widgets/appnetworkImage.dart';
+import 'components/employeeSiteDetails_components.dart';
 import 'controllers/attaichment_controller.dart';
+import 'controllers/employee_site_details_controller.dart';
 
 class AttachmentsScreen extends GetView<AttachmentsController> {
-  const AttachmentsScreen({super.key});
-
+   AttachmentsScreen({super.key});
+  final args = Get.arguments;
   @override
   Widget build(BuildContext context) {
     final bg = const Color(0xFFF6F7FB);
@@ -47,7 +51,24 @@ class AttachmentsScreen extends GetView<AttachmentsController> {
                   ],
                 ),
                 Spacer(),
-                IconButton(onPressed: () {}, icon: Icon(Icons.add_a_photo,size: 30,)),
+                Obx(() => controller.isLoading.value
+                    ? Padding(
+                        padding: const EdgeInsets.only(right: 16.0),
+                        child: SizedBox(
+                          width: 24,
+                          height: 24,
+                          child: CircularProgressIndicator(strokeWidth: 2),
+                        ),
+                      )
+                    : IconButton(
+                        onPressed: () {
+                          print(controller.siteId);
+                          controller.captureAndUploadPhoto(controller.siteId!);
+                          print(args["siteId"]);
+                        },
+                        icon: Icon(Icons.add_a_photo, size: 30),
+                      ),
+                ),
               ],
             ),
             Expanded(
@@ -58,79 +79,84 @@ class AttachmentsScreen extends GetView<AttachmentsController> {
                   children: [
                     // Recent Uploads
                     AppText(
-                      "Recent Uploads",
+                      "Admin Uploads",
                       color: textPrimary,
                       fontSize: 16,
                       fontWeight: FontWeight.w800,
                     ),
-                    const SizedBox(height: 10),
 
+
+                    const SizedBox(height: 18),
+
+                    // All Files Section - Horizontal Scroll
                     SizedBox(
-                      height: 24.h,
+                      height: 28.h, // adjust card height
                       child: Obx(() {
-                        final list = controller.recentUploads;
+                        final files = controller.allFiles;
                         return ListView.separated(
                           scrollDirection: Axis.horizontal,
-                          itemCount: list.length,
-                          separatorBuilder: (_, __) =>
-                              const SizedBox(width: 12),
+                          itemCount: files.length,
+                          padding: const EdgeInsets.symmetric(horizontal: 16),
+                          separatorBuilder: (_, __) => const SizedBox(width: 12),
                           itemBuilder: (context, index) {
-                            final item = list[index];
-                            return _RecentUploadTile(
+                            final item = files[index];
+
+                            return _FileCardHorizontal(
                               item: item,
-                              border: border,
-                              onOpen: () => controller.openAttachment(item),
-                              onDownload: () =>
-                                  controller.downloadAttachment(item),
+                              textPrimary: textPrimary,
+                              textSecondary: textSecondary,
+                              onTap: () => controller.openAttachment(item),
                             );
                           },
                         );
                       }),
                     ),
-
-                    const SizedBox(height: 18),
-
-                    // All Files
-                    AppText(
-                      "All Files",
-                      color: textPrimary,
-                      fontSize: 16,
-                      fontWeight: FontWeight.w800,
-                    ),
-                    const SizedBox(height: 10),
-
-                    Obx(() {
-                      final files = controller.allFiles;
-
-                      return GridView.builder(
-                        shrinkWrap: true,
-                        physics: const NeverScrollableScrollPhysics(),
-                        itemCount: files.length,
-                        gridDelegate:
-                            const SliverGridDelegateWithFixedCrossAxisCount(
-                              crossAxisCount: 2,
-                              crossAxisSpacing: 12,
-                              mainAxisSpacing: 12,
-                              childAspectRatio: 1.15,
-                            ),
-                        itemBuilder: (context, index) {
-                          final item = files[index];
-                          return _FileCard(
-                            item: item,
-                            border: border,
-                            textPrimary: textPrimary,
-                            textSecondary: textSecondary,
-                            onTap: () => controller.openAttachment(item),
-                          );
-                        },
-                      );
-                    }),
                     SizedBox(height: 2.h),
                     AppText(
                       "Employee Photos",
                       fontSize: 16,
                       fontWeight: FontWeight.w800,
                     ),
+                    const SizedBox(height: 10),
+                    Obx(() {
+                      final photos = controller.employeePhotos;
+
+                      if (photos.isEmpty) {
+                        return const Center(child: Text("No photos yet"));
+                      }
+
+                      return GridView.builder(
+                        shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(),
+                        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 2, // 2 columns
+                          crossAxisSpacing: 12,
+                          mainAxisSpacing: 12,
+                          childAspectRatio: 1, // square cards
+                        ),
+                        itemCount: photos.length,
+                        itemBuilder: (context, index) {
+                          final url = photos[index];
+                          return _EmployeePhotoCard(
+                            url: url,
+                            onTap: () {
+                              Get.to(() => FullScreenImagePreview(
+                                att: SiteAttachment(
+                                  id: url,
+                                  title: "Employee Photo",
+                                  subtitle: "",
+                                  type: AttachmentType.image,
+                                  thumbPathOrUrl: url,
+                                  isThumbNetwork: true,
+                                  url: url,
+                                ),
+                              ));
+                            },
+                          );
+                        },
+                      );
+                    }),
                   ],
                 ),
               ),
@@ -142,101 +168,58 @@ class AttachmentsScreen extends GetView<AttachmentsController> {
   }
 }
 
-class _RecentUploadTile extends StatelessWidget {
-  final AttachmentItem item;
-  final Color border;
-  final VoidCallback onOpen;
-  final VoidCallback onDownload;
+class _EmployeePhotoCard extends StatelessWidget {
+  final String url;
+  final VoidCallback onTap;
 
-  const _RecentUploadTile({
-    required this.item,
-    required this.border,
-    required this.onOpen,
-    required this.onDownload,
+  const _EmployeePhotoCard({
+    required this.url,
+    required this.onTap,
   });
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: onOpen,
-      borderRadius: BorderRadius.circular(14),
+      onTap: onTap,
+      borderRadius: BorderRadius.circular(16),
       child: Container(
         width: 40.w,
-        height: 22.h,
-        margin: EdgeInsets.all(10),
         decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(14),
-          border: Border.all(color: border),
-        ),
-        child: Stack(
-          children: [
-            // image
-            Positioned.fill(
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(14),
-                child: item.isThumbNetwork
-                    ? Image.network(item.thumbPath ?? "", fit: BoxFit.cover)
-                    : Image.asset(item.thumbPath ?? "", fit: BoxFit.cover),
-              ),
-            ),
-
-            // download icon
-            Positioned(
-              top: 8,
-              right: 8,
-              child: InkWell(
-                onTap: onDownload,
-                borderRadius: BorderRadius.circular(10),
-                child: Container(
-                  width: 30,
-                  height: 30,
-                  decoration: BoxDecoration(
-                    color: Colors.white.withOpacity(0.95),
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: const Icon(Icons.download_rounded, size: 18),
-                ),
-              ),
-            ),
-
-            // filename label bottom-left
-            Positioned(
-              left: 8,
-              bottom: 8,
-              right: 8,
-              child: Container(
-                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
-                decoration: BoxDecoration(
-                  color: Colors.black.withOpacity(0.55),
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                child: AppText(
-                  item.title,
-                  fontSize: 11,
-                  fontWeight: FontWeight.w700,
-                  color: Colors.white,
-                  maxLines: 1,
-                ),
-              ),
+          borderRadius: BorderRadius.circular(16),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.08),
+              blurRadius: 6,
+              offset: const Offset(0, 3),
             ),
           ],
+        ),
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(16),
+          child: AppNetworkImage(
+            url: url,
+            isCircle: false,
+            width: 20.w,
+            height: 20.w,
+            placeholderAsset: "",
+            borderWidth: 3,
+            borderColor: Colors.white,
+          )
         ),
       ),
     );
   }
 }
 
-class _FileCard extends StatelessWidget {
+
+class _FileCardHorizontal extends StatelessWidget {
   final AttachmentItem item;
-  final Color border;
   final Color textPrimary;
   final Color textSecondary;
   final VoidCallback onTap;
 
-  const _FileCard({
+  const _FileCardHorizontal({
     required this.item,
-    required this.border,
     required this.textPrimary,
     required this.textSecondary,
     required this.onTap,
@@ -245,44 +228,72 @@ class _FileCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isPdf = item.isPdf;
+    final isImage = item.isImage;
 
     return InkWell(
       onTap: onTap,
-      borderRadius: BorderRadius.circular(14),
+      borderRadius: BorderRadius.circular(16),
       child: Container(
+        width: 40.w, // card width
         padding: const EdgeInsets.all(12),
         decoration: BoxDecoration(
           color: Colors.white,
-          borderRadius: BorderRadius.circular(14),
-          border: Border.all(color: border),
+          borderRadius: BorderRadius.circular(16),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.08),
+              blurRadius: 6,
+              offset: const Offset(0, 3),
+            ),
+          ],
         ),
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Container(
-              width: 52,
-              height: 52,
-              decoration: BoxDecoration(
-                color: isPdf
-                    ? const Color(0xFFEFF6FF)
-                    : const Color(0xFFF3F4F6),
-                borderRadius: BorderRadius.circular(14),
+            // File / Image Preview
+            Expanded(
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(12),
+                child: isImage
+                    ? AppNetworkImage(
+                  url: item.thumbPath,
+                  isCircle: false,
+                  width:double.infinity,
+                  height: 20.w,
+                  placeholderAsset: "",
+                  borderWidth: 3,
+                  borderColor: Colors.white,
+                )
+                    : Container(
+                  color: const Color(0xFFF3F4F6),
+                  child: Center(
+                    child: isPdf
+                        ? SvgPicture.asset(AppIcons.pdfFileIcon, width: 40)
+                        : Icon(Icons.insert_drive_file, size: 40, color: Colors.grey),
+                  ),
+                ),
               ),
-              child: Center(child: SvgPicture.asset(AppIcons.pdfFileIcon)),
             ),
-            const SizedBox(height: 10),
+
+            const SizedBox(height: 8),
+
+            // File Name
             AppText(
               item.title,
-              fontSize: 12.5,
-              fontWeight: FontWeight.w800,
+              fontSize: 13,
+              fontWeight: FontWeight.w700,
               color: textPrimary,
               maxLines: 1,
+              overflow: TextOverflow.ellipsis,
             ),
+
             const SizedBox(height: 4),
+
+            // File Type / Extension
             AppText(
               item.subtitle,
-              fontSize: 11.5,
-              fontWeight: FontWeight.w700,
+              fontSize: 11,
+              fontWeight: FontWeight.w500,
               color: textSecondary,
             ),
           ],

@@ -18,5 +18,10 @@ class AppIcons {
   static final String privacyIcon = "assets/icons/privacy_policy.svg";
   static final String messageIcon = "assets/icons/message_icon.svg";
   static final String termCondtionIcon = "assets/icons/terms_condition.svg";
+  static final String FileIcon = "assets/icons/excelFileIcon.svg";
+  static final String ExcelIcon = "assets/icons/terms_condition.svg";
+  static final String ImageFileIcon = "assets/icons/terms_condition.svg";
+  static final String WordFileIcon = "assets/icons/terms_condition.svg";
+  static final String ZipFileIcon = "assets/icons/terms_condition.svg";
 
 }

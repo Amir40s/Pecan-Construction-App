@@ -7,7 +7,6 @@ import 'package:pecan_construction/config/bindings/notification_binding.dart';
 import 'package:pecan_construction/config/bindings/role_binding.dart';
 import 'package:pecan_construction/config/bindings/signUpBindings.dart';
 import 'package:pecan_construction/config/routes/routes_name.dart';
-import 'package:pecan_construction/screens/auth_screens/controllers/role_controllers.dart';
 import 'package:pecan_construction/screens/auth_screens/forget_password_screens.dart';
 import 'package:pecan_construction/screens/auth_screens/signin_screen.dart';
 import 'package:pecan_construction/screens/auth_screens/signup_screens.dart';
@@ -17,8 +16,11 @@ import '../../screens/admin_screens/add_ataichment_screen.dart';
 import '../../screens/admin_screens/assign_employe_screen.dart';
 import '../../screens/admin_screens/bottom_nav_screen.dart';
 import '../../screens/admin_screens/create_site_screen.dart';
+import '../../screens/admin_screens/profile_screen.dart';
 import '../../screens/admin_screens/setting_screens.dart';
 import '../../screens/admin_screens/site_details_screen.dart';
+import '../../screens/admin_screens/site_details_screen2.dart';
+import '../../screens/auth_screens/admin_login_screen.dart';
 import '../../screens/auth_screens/role_selection_screen.dart';
 import '../../screens/employ_screens/bottom_nav_screen.dart';
 import '../../screens/employ_screens/contact_admin_screen.dart';
@@ -31,24 +33,30 @@ import '../../screens/employ_screens/employee_site_screen.dart';
 import '../../screens/employ_screens/privacy_policy.dart';
 import '../../screens/employ_screens/term_and_conditions.dart';
 import '../bindings/add_attaichment_binding.dart';
+import '../bindings/adminLoginBinding.dart';
+import '../bindings/adminSiteDetailsBinding.dart';
 import '../bindings/app_bindings.dart';
 import '../bindings/employ_attaichmentBinding.dart';
 import '../bindings/employee_home_binding.dart';
 import '../bindings/employee_site_details_binding.dart';
+import '../bindings/signInBinding.dart';
 
 class AppRoutes {
 
   static final routes = [
     GetPage(name: RoutesName.splash,
-        page:() =>  SplashScreen()),
+        page:() =>  SplashScreen()
+    ),
     GetPage(name: RoutesName.login,
-        page:() =>  SigninScreen()),
+        page:() =>  SigninScreen(),
+    binding: SignInBinding()),
     GetPage(name: RoutesName.signup,
         page:() =>  SignUpScreens(),
       binding: SignUpBinding()
    ),
     GetPage(name: RoutesName.forgotPassword,
-        page:() =>  ForgetPasswordScreens()),
+        page:() =>  ForgetPasswordScreens(),
+    binding: SignInBinding()),
 
     GetPage(name: RoutesName.BottomNavScreen,
         page:() =>  BottomNavScreen(),
@@ -68,6 +76,7 @@ class AppRoutes {
     ),
     GetPage(name: RoutesName.SiteDetailsScreen,
         page:() =>  SiteDetailsScreen(),
+      binding: AdminSiteDetailsBinding(),
     ),
     GetPage(name: RoutesName.SettingsScreen,
       page:() =>  SettingsScreen(),
@@ -111,6 +120,18 @@ class AppRoutes {
     ),
     GetPage(name: RoutesName.ContactAdminScreen,
       page:() =>  ContactAdminScreen(),
+    ),
+    GetPage(name: RoutesName.adminLoginScreen,
+      page:() =>  adminLoginScreen(),
+      binding: AdminLoginBinding(),
+    ),
+    GetPage(name: RoutesName.ProfileScreen,
+      page:() =>  ProfileScreen(),
+      binding: AdminLoginBinding(),
+    ),
+    GetPage(name: RoutesName.SiteDetailsScreen_2,
+      page:() =>  SiteDetailsScreen_2(),
+      binding: AdminSiteDetailsBinding(),
     ),
   ];
 }

@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "681812156155",
+    "project_id": "pecan-app-a258c",
+    "storage_bucket": "pecan-app-a258c.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:681812156155:android:868d57ed77c31eaeed9a5e",
+        "android_client_info": {
+          "package_name": "com.example.pecan_construction"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBj7h-lhAANzrV_K5gkWo3xmCTScsYgbBc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

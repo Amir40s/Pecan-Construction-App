@@ -8,7 +8,7 @@ class EmployeeNotificationItem {
   final NotificationType type;
   final bool isUnread; // red dot
   final bool isHighPriority; // "High Priority" tag in subtitle (optional)
-
+  final String? siteId;
   const EmployeeNotificationItem({
     required this.id,
     required this.title,
@@ -17,10 +17,12 @@ class EmployeeNotificationItem {
     required this.type,
     this.isUnread = false,
     this.isHighPriority = false,
+    this.siteId,
   });
 
   EmployeeNotificationItem copyWith({
     bool? isUnread,
+    String? siteId,
   }) {
     return EmployeeNotificationItem(
       id: id,
@@ -30,6 +32,7 @@ class EmployeeNotificationItem {
       type: type,
       isUnread: isUnread ?? this.isUnread,
       isHighPriority: isHighPriority,
+      siteId: siteId ?? this.siteId,
     );
   }
 }

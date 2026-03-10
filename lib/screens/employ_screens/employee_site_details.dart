@@ -3,14 +3,15 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:pecan_construction/config/routes/routes_name.dart';
 import 'package:pecan_construction/core/constant/app_icons.dart';
+import 'package:pecan_construction/core/constant/app_images.dart';
 import 'package:pecan_construction/core/widgets/header_widget.dart';
-
 import '../../core/widgets/app_text.dart';
+import 'components/employeeSiteDetails_components.dart';
 import 'controllers/employee_site_details_controller.dart';
 
 class EmployeeSiteDetailsScreen extends GetView<EmployeeSiteDetailsController> {
-  const EmployeeSiteDetailsScreen({super.key});
-
+   EmployeeSiteDetailsScreen({super.key});
+  final args = Get.arguments;
   @override
   Widget build(BuildContext context) {
     final bg = const Color(0xFFF6F7FB);
@@ -32,10 +33,30 @@ class EmployeeSiteDetailsScreen extends GetView<EmployeeSiteDetailsController> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     // Top bar
-                   CustomHeader(title: "Site Details", showBack: true,),
+                    CustomHeader(
+                      title: "site_details".tr,
+                      showBack: true,
+                    ),                    const SizedBox(height: 12),
+          SiteStatusRow(
+          title: controller.siteTitle.toString(),
+          subtitle: controller.siteDescription.toString(),
 
-                    const SizedBox(height: 12),
+          status: controller.siteStatus.value.trim().toLowerCase() == "active"
+          ? "Active"
+              : controller.siteStatus.value.trim().toLowerCase() == "completed"
+          ? "Completed"
+              : controller.siteStatus.value.trim().toLowerCase() == "paused"
+          ? "Paused"
+              : "Unknown",
 
+          statusColor: controller.siteStatus.value.trim().toLowerCase() == "active"
+          ? const Color(0xFFC22522) // red
+              : controller.siteStatus.value.trim().toLowerCase() == "completed"
+          ? const Color(0xFF10B981) // green
+              : controller.siteStatus.value.trim().toLowerCase() == "paused"
+          ? Colors.grey // grey
+              : Colors.amber,
+          ),
                     // Top Site Card (Title + Open in Maps + Map)
                     Container(
                       padding: const EdgeInsets.all(12),
@@ -69,7 +90,7 @@ class EmployeeSiteDetailsScreen extends GetView<EmployeeSiteDetailsController> {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     AppText(
-                                      controller.siteTitle.value,
+                                     "ABC Testing ",
                                       color: textPrimary,
                                       fontSize: 16,
                                       fontWeight: FontWeight.w800,
@@ -88,17 +109,21 @@ class EmployeeSiteDetailsScreen extends GetView<EmployeeSiteDetailsController> {
                                 ),
                               ),
 
-                              Container(
-                                width: 34,
-                                height: 34,
-                                decoration: BoxDecoration(
-                                  color: const Color(0xFFF3F4F6),
-                                  borderRadius: BorderRadius.circular(12),
-                                ),
-                                child: Icon(
-                                  Icons.arrow_forward_ios_rounded,
-                                  size: 16,
-                                  color: Colors.grey.shade700,
+                              InkWell(
+                                onTap: (){
+                                },
+                                child: Container(
+                                  width: 34,
+                                  height: 34,
+                                  decoration: BoxDecoration(
+                                    color: const Color(0xFFF3F4F6),
+                                    borderRadius: BorderRadius.circular(12),
+                                  ),
+                                  child: Icon(
+                                    Icons.arrow_forward_ios_rounded,
+                                    size: 16,
+                                    color: Colors.grey.shade700,
+                                  ),
                                 ),
                               ),
                             ],
@@ -110,13 +135,8 @@ class EmployeeSiteDetailsScreen extends GetView<EmployeeSiteDetailsController> {
                             borderRadius: BorderRadius.circular(14),
                             child: AspectRatio(
                               aspectRatio: 16 / 9,
-                              child: controller.isMapNetwork.value
-                                  ? Image.network(
-                                controller.mapPreviewPathOrUrl.value,
-                                fit: BoxFit.cover,
-                              )
-                                  : Image.asset(
-                                controller.mapPreviewPathOrUrl.value,
+                              child:  Image.asset(
+                                AppImages.GoogleMapImage,
                                 fit: BoxFit.cover,
                               ),
                             ),
@@ -129,7 +149,7 @@ class EmployeeSiteDetailsScreen extends GetView<EmployeeSiteDetailsController> {
 
                     // Assigned Staff
                     AppText(
-                      "Assigned Staff",
+                      "assigned_staff".tr,
                       color: textPrimary,
                       fontSize: 16,
                       fontWeight: FontWeight.w800,
@@ -151,7 +171,7 @@ class EmployeeSiteDetailsScreen extends GetView<EmployeeSiteDetailsController> {
 
                     // Site Description
                     AppText(
-                      "Site Description",
+                      "site_description".tr,
                       color: textPrimary,
                       fontSize: 16,
                       fontWeight: FontWeight.w800,
@@ -166,7 +186,7 @@ class EmployeeSiteDetailsScreen extends GetView<EmployeeSiteDetailsController> {
                         border: Border.all(color: border),
                       ),
                       child: AppText(
-                        controller.siteDescription.value,
+                        controller.siteNote.value,
                         color: textSecondary,
                         fontSize: 14,
                         fontWeight: FontWeight.w600,
@@ -179,7 +199,7 @@ class EmployeeSiteDetailsScreen extends GetView<EmployeeSiteDetailsController> {
                     Row(
                       children: [
                         AppText(
-                          "Attachments",
+                          "attachments".tr,
                           color: textPrimary,
                           fontSize: 16,
                           fontWeight: FontWeight.w800,
@@ -187,14 +207,17 @@ class EmployeeSiteDetailsScreen extends GetView<EmployeeSiteDetailsController> {
                         const Spacer(),
                         InkWell(
                           onTap: (){
-                           Get.toNamed(RoutesName.AttachmentsScreen);
+                            print(args["siteId"]);
+                           Get.toNamed(RoutesName.AttachmentsScreen, arguments: {
+                             "siteId" : args["siteId"],
+                           });
                           },
                           child:AppText(
-                            "See All",
-                            color: Color(0xffC22522),
+                            "see_all".tr,
+                            color: const Color(0xffC22522),
                             fontSize: 14,
                             fontWeight: FontWeight.w800,
-                          ) ,
+                          ),
                         ),
                       ],
                     ),
@@ -231,6 +254,7 @@ class EmployeeSiteDetailsScreen extends GetView<EmployeeSiteDetailsController> {
                             textPrimary: textPrimary,
                             textSecondary: textSecondary,
                             onTap: () => controller.onTapAttachment(att),
+                            onDownload: () => controller.onTapDownload(att),
                           );
                         },
                       );
@@ -259,6 +283,80 @@ class EmployeeSiteDetailsScreen extends GetView<EmployeeSiteDetailsController> {
   }
 }
 
+class SiteStatusRow extends StatelessWidget {
+  final String title;
+  final String subtitle;
+  final String status;
+  final Color statusColor;
+
+  const SiteStatusRow({
+    super.key,
+    required this.title,
+    required this.subtitle,
+    required this.status,
+    required this.statusColor,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          /// Left side (title + subtitle)
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  title,
+                  style: const TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.w700,
+                    color: Colors.black87,
+                  ),
+                ),
+                Text(
+                  subtitle,
+                  style: TextStyle(
+                    fontSize: 15,
+                    color: Colors.grey.shade600,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+              ],
+            ),
+          ),
+
+          /// Status indicator
+          Row(
+            children: [
+              Container(
+                width: 9,
+                height: 9,
+                decoration: BoxDecoration(
+                  color: statusColor,
+                  shape: BoxShape.circle,
+                ),
+              ),
+              const SizedBox(width: 6),
+              Text(
+                status,
+                style: TextStyle(
+                  fontSize: 12,
+                  color: Colors.grey.shade700,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+}
+
 /// ------- Chips -------
 class _NameChip extends StatelessWidget {
   final String name;
@@ -281,9 +379,10 @@ class _NameChip extends StatelessWidget {
         borderRadius: BorderRadius.circular(999),
       ),
       child: AppText(
+        overflow: TextOverflow.ellipsis,
         name,
         color: textColor,
-        fontSize: 14,
+        fontSize: 11.5,
         fontWeight: FontWeight.w700,
       ),
     );
@@ -375,6 +474,7 @@ class _PdfAttachmentTile extends StatelessWidget {
   final Color textPrimary;
   final Color textSecondary;
   final VoidCallback onTap;
+  final VoidCallback onDownload;
 
   const _PdfAttachmentTile({
     required this.att,
@@ -382,6 +482,7 @@ class _PdfAttachmentTile extends StatelessWidget {
     required this.textPrimary,
     required this.textSecondary,
     required this.onTap,
+    required this.onDownload,
   });
 
   @override
@@ -398,40 +499,61 @@ class _PdfAttachmentTile extends StatelessWidget {
           border: Border.all(color: border),
           borderRadius: BorderRadius.circular(14),
         ),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+        child: Stack(
           children: [
-            Container(
-              width: 48,
-              height: 48,
-              decoration: BoxDecoration(
-                color: isBlue ? const Color(0xFFEFF6FF) : const Color(0xFFFFE7E7),
-                borderRadius: BorderRadius.circular(14),
+            Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Container(
+                    width: 48,
+                    height: 48,
+                    decoration: BoxDecoration(
+                      color: isBlue ? const Color(0xFFEFF6FF) : const Color(0xFFFFE7E7),
+                      borderRadius: BorderRadius.circular(14),
+                    ),
+                    child: Center(
+                      child: Icon(
+                        Icons.picture_as_pdf_rounded,
+                        color: isBlue ? const Color(0xFF2563EB) : const Color(0xFFC22522),
+                        size: 26,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 10),
+                  AppText(
+                    att.title,
+                    color: textPrimary,
+                    fontSize: 12.5,
+                    fontWeight: FontWeight.w800,
+                    maxLines: 1,
+                  ),
+                  const SizedBox(height: 4),
+                  AppText(
+                    att.subtitle,
+                    color: textSecondary,
+                    fontSize: 11.5,
+                    fontWeight: FontWeight.w700,
+                  ),
+                ],
               ),
-              child: Center(
-                child: Icon(
-                  Icons.picture_as_pdf_rounded,
-                  color: isBlue ? const Color(0xFF2563EB) : const Color(0xFFC22522),
-                  size: 26,
+            ),
+            Positioned(
+              top: 8,
+              right: 8,
+              child: InkWell(
+                onTap: onDownload,
+                borderRadius: BorderRadius.circular(10),
+                child: Container(
+                  width: 30,
+                  height: 30,
+                  decoration: BoxDecoration(
+                    color: Colors.grey.shade100,
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: const Icon(Icons.download_rounded, size: 18),
                 ),
-                // svg option:
-                // SvgPicture.asset(isBlue ? AppIcons.pdfBlue : AppIcons.pdfRed)
               ),
-            ),
-            const SizedBox(height: 10),
-            AppText(
-              att.title,
-              color: textPrimary,
-              fontSize: 12.5,
-              fontWeight: FontWeight.w800,
-              maxLines: 1,
-            ),
-            const SizedBox(height: 4),
-            AppText(
-              att.subtitle,
-              color: textSecondary,
-              fontSize: 11.5,
-              fontWeight: FontWeight.w700,
             ),
           ],
         ),

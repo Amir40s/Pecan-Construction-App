@@ -43,7 +43,10 @@ class EmployeNotificationScreen extends GetView<EmployeeNotificationController> 
                       final item = items[index];
                       return _NotificationTile(
                         item: item,
-                        onTap: () => c.markAsRead(item.id),
+                        onTap: () {
+                          print(items[index].siteId);
+                         c.openNotification(item);
+                        },
                       );
                     },
                   );
@@ -81,7 +84,7 @@ class _TopTabs extends StatelessWidget {
             ),
             child: AppText(
               title,
-              fontSize: 16,
+              fontSize: 12,
               fontWeight: selected ? FontWeight.w800 : FontWeight.w600,
               color: selected ? Colors.black : Colors.grey.shade600,
             ),
@@ -90,14 +93,14 @@ class _TopTabs extends StatelessWidget {
       });
     }
 
-    return Row(
+    return  Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
-        tab("All", NotificationTab.all),
+        tab("all_notifications".tr, NotificationTab.all),
         const Gap(18),
-        tab("Reminders", NotificationTab.reminders),
+        tab("reminders".tr, NotificationTab.reminders),
         const Gap(18),
-        tab("Updates", NotificationTab.updates),
+        tab("updates".tr, NotificationTab.updates),
       ],
     );
   }
@@ -115,31 +118,38 @@ class _NotificationTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isAlert = item.type == NotificationType.reminder;
 
-    final iconBg = isAlert ? const Color(0xFFFFE1E1) : const Color(0xFFEAEAEA);
-    final iconColor = isAlert ? const Color(0xFFC22522) : Colors.grey.shade700;
+    final isReminder = item.type == NotificationType.reminder;
+
+    final iconBg =
+    isReminder ? const Color(0xFFFFE1E1) : const Color(0xFFEAEAEA);
+
+    final iconColor =
+    isReminder ? const Color(0xFFC22522) : Colors.grey.shade700;
 
     return InkWell(
       onTap: onTap,
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
-        margin: EdgeInsets.all(4),
+        margin: const EdgeInsets.all(4),
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: item.isUnread
+              ? const Color(0xFFFFFAFA)
+              : Colors.white,
           borderRadius: BorderRadius.circular(12),
-          border: BoxBorder.all(color: Colors.grey.shade200),
+          border: Border.all(color: Colors.grey.shade200),
           boxShadow: [
             BoxShadow(
               color: Colors.grey.shade200,
-              blurRadius: 2
+              blurRadius: 2,
             )
-          ]
+          ],
         ),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            /// Left Icon Box
+
+            /// Left Icon
             Container(
               width: 44,
               height: 44,
@@ -156,25 +166,30 @@ class _NotificationTile extends StatelessWidget {
 
             const Gap(12),
 
-            /// Middle Text
+            /// Text Section
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+
+                  /// Title + Unread Dot
                   Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
+
                       Expanded(
                         child: AppText(
-                          overflow: TextOverflow.ellipsis,
-                          maxLines: 1,
                           item.title,
                           fontSize: 16,
-                          fontWeight: FontWeight.w800,
+                          fontWeight: FontWeight.w700,
                           color: Colors.black87,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
                         ),
                       ),
+
                       if (item.isUnread) ...[
-                        const Gap(8),
+                        const Gap(6),
                         Container(
                           width: 7,
                           height: 7,
@@ -186,14 +201,16 @@ class _NotificationTile extends StatelessWidget {
                       ],
                     ],
                   ),
+
                   const Gap(4),
+
+                  /// Body
                   AppText(
-                    overflow: TextOverflow.ellipsis,
-                    maxLines: 1,
                     item.subtitle,
-                    fontSize: 12,
-                    fontWeight: FontWeight.w600,
-                    color: Colors.grey.shade600,
+                    fontSize: 13,
+                    color: Colors.grey.shade700,
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
                   ),
                 ],
               ),
@@ -201,10 +218,10 @@ class _NotificationTile extends StatelessWidget {
 
             const Gap(10),
 
-            /// Right Time
+            /// Time
             AppText(
               item.timeLabel,
-              fontSize: 10.8,
+              fontSize: 11,
               fontWeight: FontWeight.w600,
               color: Colors.grey.shade500,
             ),

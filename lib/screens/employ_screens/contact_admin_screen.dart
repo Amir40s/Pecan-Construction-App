@@ -1,8 +1,12 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
+import 'package:get/get.dart';
+import 'package:pecan_construction/screens/employ_screens/controllers/adminLogincontroller.dart';
 import 'package:sizer/sizer.dart';
-// import 'package:url_launcher/url_launcher.dart';
+
+import '../../core/constant/app_images.dart';
+import 'controllers/ContactAdminController.dart';
 
 class ContactAdminScreen extends StatefulWidget {
   const ContactAdminScreen({
@@ -20,8 +24,14 @@ class ContactAdminScreen extends StatefulWidget {
 
 class _ContactAdminScreenState extends State<ContactAdminScreen> {
   final TextEditingController messageController = TextEditingController();
-
+  final adminC = Get.find<AdminLoginController>();
   bool isSending = false;
+  late final controller = Get.put(
+    ContactAdminController(
+      adminEmail: widget.adminEmail,
+      adminPhone: widget.adminPhone,
+    ),
+  );
 
   @override
   void dispose() {
@@ -79,7 +89,7 @@ class _ContactAdminScreenState extends State<ContactAdminScreen> {
             child: Column(
               children: [
                 const SizedBox(height: 10),
-        
+
                 // Top bar with circular back + title
                 Row(
                   children: [
@@ -97,37 +107,47 @@ class _ContactAdminScreenState extends State<ContactAdminScreen> {
                     const SizedBox(width: 44, height: 44),
                   ],
                 ),
-        
+
                 const SizedBox(height: 16),
-        
+
                 // Avatar + role
                 Column(
                   children: [
-                    Container(
-                      width: 86,
-                      height: 86,
-                      decoration: const BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: Color(0xFFFFC37A),
-                      ),
-                      child: const Center(
-                        child: Icon(Icons.person, size: 44, color: Color(0xFF6B3A00)),
-                      ),
-                    ),
+                    Obx(() {
+                      if (adminC.selectedProfileImage.value != null) {
+                        return CircleAvatar(
+                          radius: 43,
+                          backgroundImage:
+                          FileImage(adminC.selectedProfileImage.value!),
+                        );
+                      }
+
+                      return CircleAvatar(
+                        radius: 43,
+                        backgroundImage: adminC.adminProfileImage.value.isNotEmpty
+                            ? NetworkImage(adminC.adminProfileImage.value)
+                            :  AssetImage(AppImages.profileImage)
+                        as ImageProvider,
+                      );
+                    }),
+
                     const SizedBox(height: 10),
-                    Text(
-                      "Admin",
-                      style: TextStyle(
-                        color: red,
+
+                    Obx(() => Text(
+                      adminC.adminName.value.isEmpty
+                          ? "Admin"
+                          : adminC.adminName.value,
+                      style: const TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.w800,
+                        color: Color(0xFFB01818),
                       ),
-                    ),
+                    )),
                   ],
                 ),
-        
+
                 const SizedBox(height: 18),
-        
+
                 // Email (readOnly)
                 _Label("Admin Email"),
                 const SizedBox(height: 6),
@@ -146,9 +166,9 @@ class _ContactAdminScreenState extends State<ContactAdminScreen> {
                     ],
                   ),
                 ),
-        
+
                 const SizedBox(height: 12),
-        
+
                 // Phone (readOnly)
                 _Label("Admin Number"),
                 const SizedBox(height: 6),
@@ -167,16 +187,16 @@ class _ContactAdminScreenState extends State<ContactAdminScreen> {
                     ],
                   ),
                 ),
-        
+
                 const SizedBox(height: 12),
-        
+
                 // Message (editable)
                 _Label("Message"),
                 const SizedBox(height: 6),
                 _InputBox(
                   borderColor: borderRed,
                   child: TextField(
-                    controller: messageController,
+                    controller:  controller.messageController,
                     maxLines: 5,
                     style: const TextStyle(fontSize: 13.5),
                     decoration: const InputDecoration(
@@ -188,31 +208,33 @@ class _ContactAdminScreenState extends State<ContactAdminScreen> {
                   ),
                 ),
             Gap(12.h),
-        
+
                 // Send button
-                SizedBox(
+                Obx(() => SizedBox(
                   width: double.infinity,
                   height: 52,
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
                       backgroundColor: red,
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
-                      elevation: 0,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(6),
+                      ),
                     ),
-                    onPressed: isSending ? null : _openEmail,
-                    child: isSending
-                        ? const SizedBox(
-                      width: 22,
-                      height: 22,
-                      child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white),
-                    )
+                    onPressed: controller.isSending.value
+                        ? null
+                        : controller.sendMessage,
+                    child: controller.isSending.value
+                        ? const CircularProgressIndicator(color: Colors.white)
                         : const Text(
                       "Send",
-                      style: TextStyle(fontWeight: FontWeight.w700, color: Colors.white),
+                      style: TextStyle(
+                        fontWeight: FontWeight.w700,
+                        color: Colors.white,
+                      ),
                     ),
                   ),
-                ),
-        
+                )),
+
                 const SizedBox(height: 18),
               ],
             ),

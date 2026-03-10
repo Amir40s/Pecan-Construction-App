@@ -1,114 +1,114 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
-import '../../core/widgets/app_text.dart';
-
-class TermsConditionsScreen extends StatefulWidget {
+class TermsConditionsScreen extends StatelessWidget {
   const TermsConditionsScreen({super.key});
 
   @override
-  State<TermsConditionsScreen> createState() => _TermsConditionsScreenState();
-}
-
-class _TermsConditionsScreenState extends State<TermsConditionsScreen> {
-  bool accepted = false;
-  String lang = "EN";
-
-  @override
   Widget build(BuildContext context) {
-    final isEN = lang == "EN";
 
     return Scaffold(
+      backgroundColor: const Color(0xFFF6F7FB),
+
       appBar: AppBar(
+        elevation: 0,
         backgroundColor: Colors.transparent,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back_ios_new_rounded,color: Colors.black),
+          onPressed: (){
+            Get.back();
+          },
+        ),
+        title: const Text(
+          "Terms & Conditions",
+          style: TextStyle(
+            color: Colors.black,
+            fontWeight: FontWeight.w700,
+          ),
+        ),
         centerTitle: true,
-        title: AppText(isEN ? "Terms & Conditions" : "AGB", fontSize: 20,fontWeight: FontWeight.w800),
-        actions: [
-          TextButton(
-            onPressed: () {
-              setState(() {
-                lang = lang == "EN" ? "DE" : "EN";
-              });
-            },
-            child: Text(
-              lang == "EN" ? "DE" : "EN",
-              style: const TextStyle(color: Colors.white),
-            ),
-          )
-        ],
       ),
-      body: Column(
-        children: [
-          Expanded(
-            child: SingleChildScrollView(
-              padding: const EdgeInsets.all(16),
-              child: Text(
-                isEN
-                    ? """
-By using this application, you agree to the following terms.
 
-1. Usage
-You agree to use the application only for authorized business purposes.
+      body: SingleChildScrollView(
+        padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 10),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: const [
 
-2. Accounts
-You are responsible for keeping your account secure.
-
-3. Content
-Uploaded files remain your responsibility.
-
-4. Availability
-We may update or modify the application at any time.
-
-5. Liability
-The application is provided "as is" without warranties.
-"""
-                    : """
-Durch Nutzung dieser App stimmen Sie den folgenden Bedingungen zu.
-
-1. Nutzung
-Die App darf nur für autorisierte Zwecke genutzt werden.
-
-2. Konten
-Sie sind für die Sicherheit Ihres Kontos verantwortlich.
-
-3. Inhalte
-Hochgeladene Dateien bleiben Ihre Verantwortung.
-
-4. Verfügbarkeit
-Die App kann jederzeit aktualisiert werden.
-
-5. Haftung
-Die App wird ohne Garantien bereitgestellt.
-""",
-                style: const TextStyle(fontSize: 14),
+            Text(
+              "Terms & Conditions",
+              style: TextStyle(
+                fontSize: 22,
+                fontWeight: FontWeight.w800,
               ),
             ),
-          ),
-          Row(
-            children: [
-              Checkbox(
-                value: accepted,
-                onChanged: (v) {
-                  setState(() => accepted = v!);
-                },
-              ),
-              Expanded(
-                child: Text(isEN
-                    ? "I agree to Terms & Conditions"
-                    : "Ich stimme den Bedingungen zu"),
-              )
-            ],
-          ),
-          Padding(
-            padding: const EdgeInsets.all(16),
-            child: SizedBox(
-              width: double.infinity,
-              child: ElevatedButton(
-                onPressed: accepted ? () => Navigator.pop(context) : null,
-                child: Text(isEN ? "Continue" : "Weiter"),
-              ),
+
+            SizedBox(height: 12),
+
+            Text(
+              "By using this application, you agree to comply with and be bound by the following terms and conditions.",
+              style: TextStyle(fontSize: 14,height: 1.6),
             ),
-          )
-        ],
+
+            SizedBox(height: 20),
+
+            Text(
+              "Use of Application",
+              style: TextStyle(fontSize: 16,fontWeight: FontWeight.w700),
+            ),
+
+            SizedBox(height: 6),
+
+            Text(
+              "This application is intended for construction site management. Employees can view assigned sites, download files, and receive notifications.",
+              style: TextStyle(fontSize: 14,height: 1.6),
+            ),
+
+            SizedBox(height: 20),
+
+            Text(
+              "User Responsibilities",
+              style: TextStyle(fontSize: 16,fontWeight: FontWeight.w700),
+            ),
+
+            SizedBox(height: 6),
+
+            Text(
+              "Users must ensure that the information accessed through the application is used responsibly and only for official project purposes.",
+              style: TextStyle(fontSize: 14,height: 1.6),
+            ),
+
+            SizedBox(height: 20),
+
+            Text(
+              "Intellectual Property",
+              style: TextStyle(fontSize: 16,fontWeight: FontWeight.w700),
+            ),
+
+            SizedBox(height: 6),
+
+            Text(
+              "All content, files, and data within the application remain the property of the organization managing the construction projects.",
+              style: TextStyle(fontSize: 14,height: 1.6),
+            ),
+
+            SizedBox(height: 20),
+
+            Text(
+              "Changes to Terms",
+              style: TextStyle(fontSize: 16,fontWeight: FontWeight.w700),
+            ),
+
+            SizedBox(height: 6),
+
+            Text(
+              "The administrator may update these terms from time to time. Continued use of the application indicates acceptance of the updated terms.",
+              style: TextStyle(fontSize: 14,height: 1.6),
+            ),
+
+            SizedBox(height: 30),
+          ],
+        ),
       ),
     );
   }

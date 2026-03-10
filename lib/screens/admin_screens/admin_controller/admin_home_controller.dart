@@ -1,100 +1,89 @@
+import 'dart:async';
 import 'package:get/get.dart';
-import 'package:intl/intl.dart';
 import 'package:pecan_construction/core/constant/app_images.dart';
+import 'package:pecan_construction/core/repo/site_repository.dart';
 import '../../../core/models/site_model.dart';
+import '../../../core/widgets/failure.dart';
 
-enum CalendarViewType { day, week, month }
 enum SiteTab { all, active, completed }
+
 class AdminHomeController extends GetxController {
+  final SitesRepository repository = SitesRepository();
 
   final selectedSiteTab = SiteTab.all.obs;
+  final isLoadingSites = false.obs;
 
-  void changeSiteTab(SiteTab tab) {
-    selectedSiteTab.value = tab;
-  }
-  // header
   final adminName = "Admin".obs;
   final welcomeText = "Welcome".obs;
   final profileImage = AppImages.profileImage.obs;
 
-  // calendar
-  final selectedView = CalendarViewType.month.obs;
-  final focusedMonth = DateTime.now().obs;       // month being shown
-  final selectedDate = DateTime.now().obs;       // selected day
+  final sites = <SitesModel>[].obs;
+  StreamSubscription? _sitesSubscription;
 
-  // Your sites list should already exist
-  final sites = <SiteModel>[].obs;
-
-  List<SiteModel> get filteredSites {
-    final tab = selectedSiteTab.value;
-    if (tab == SiteTab.all) return sites;
-    if (tab == SiteTab.active) {
-      return sites.where((s) => s.status == SiteStatus.active).toList();
-    }
-    return sites.where((s) => s.status == SiteStatus.completed).toList();
+  void changeSiteTab(SiteTab tab) {
+    selectedSiteTab.value = tab;
   }
+
+  int get totalSitesCount => sites.length;
+
+  int get activeSitesCount => sites
+      .where((s) => s.siteStatus.trim().toLowerCase() == "active")
+      .length;
+
+  int get completedSitesCount => sites
+      .where((s) => s.siteStatus.trim().toLowerCase() == "completed")
+      .length;
+
+  List<SitesModel> get activeSitesList => sites
+      .where((s) => s.siteStatus.trim().toLowerCase() == "active")
+      .toList();
+
+  List<SitesModel> get filteredSites {
+    final tab = selectedSiteTab.value;
+
+    switch (tab) {
+      case SiteTab.all:
+        return sites;
+
+      case SiteTab.active:
+        return sites
+            .where((s) => s.siteStatus.trim().toLowerCase() == "active")
+            .toList();
+
+      case SiteTab.completed:
+        return sites
+            .where((s) => s.siteStatus.trim().toLowerCase() == "completed")
+            .toList();
+    }
+  }
+
   @override
   void onInit() {
     super.onInit();
-
-    // Dummy data example (replace with your real data)
-    sites.assignAll([
-      SiteModel(
-        title: "Downtown Plaza Renovation",
-        subTitle: "Site #402. • Interior Finishing",
-        imagePath: AppImages.SiteImage,
-        progressText: "In Progress",
-        status: SiteStatus.active,
-      ),
-      SiteModel(
-        title: "Pine Street Bridge Rehab",
-        subTitle: "Site #402. • Interior Finishing",
-        imagePath: AppImages.Site2Image,
-        progressText: "In Progress",
-        status: SiteStatus.active,
-      ),
-      SiteModel(
-        title: "Old Mall Project",
-        subTitle: "Site #112. • Finishing",
-        imagePath:  AppImages.Site2Image,
-        progressText: "Completed",
-        status: SiteStatus.completed,
-      ),
-    ]);
+    fetchSitesRealtime();
   }
 
+  void fetchSitesRealtime() {
+    isLoadingSites.value = true;
 
-  void changeView(CalendarViewType type) {
-    selectedView.value = type;
+    _sitesSubscription?.cancel();
+    _sitesSubscription = repository.fetchAllSitesRealtime().listen((result) {
+      result.fold(
+            (Failure failure) {
+          isLoadingSites.value = false;
+          Get.snackbar("Error", failure.message);
+        },
+            (List<SitesModel> fetchedSites) {
+          sites.assignAll(fetchedSites);
+          isLoadingSites.value = false;
+        },
+      );
+    });
   }
 
-  void selectDate(DateTime date) {
-    selectedDate.value = date;
-  }
-
-  void prevMonth() {
-    final m = focusedMonth.value;
-    focusedMonth.value = DateTime(m.year, m.month - 1, 1);
-  }
-
-  void nextMonth() {
-    final m = focusedMonth.value;
-    focusedMonth.value = DateTime(m.year, m.month + 1, 1);
-  }
-
-  String get monthLabel => DateFormat("MMM").format(focusedMonth.value);
-  String get yearLabel => DateFormat("yyyy").format(focusedMonth.value);
-
-  // month grid helper
-  List<DateTime> getMonthDaysGrid(DateTime month) {
-    final firstDay = DateTime(month.year, month.month, 1);
-    final lastDay = DateTime(month.year, month.month + 1, 0);
-
-    // start from Sunday
-    final startOffset = firstDay.weekday % 7; // Sunday=0
-    final gridStart = firstDay.subtract(Duration(days: startOffset));
-
-    // 6 rows x 7 cols = 42 days
-    return List.generate(42, (i) => gridStart.add(Duration(days: i)));
+  @override
+  void onClose() {
+    _sitesSubscription?.cancel();
+    super.onClose();
   }
 }

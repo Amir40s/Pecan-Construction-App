@@ -1,113 +1,114 @@
 import 'package:flutter/material.dart';
-import 'package:pecan_construction/core/widgets/app_text.dart';
+import 'package:get/get.dart';
 
-class PrivacyPolicyScreen extends StatefulWidget {
+class PrivacyPolicyScreen extends StatelessWidget {
   const PrivacyPolicyScreen({super.key});
 
   @override
-  State<PrivacyPolicyScreen> createState() => _PrivacyPolicyScreenState();
-}
-
-class _PrivacyPolicyScreenState extends State<PrivacyPolicyScreen> {
-  bool accepted = false;
-  String lang = "EN";
-
-  @override
   Widget build(BuildContext context) {
-    final isEN = lang == "EN";
 
     return Scaffold(
+      backgroundColor: const Color(0xFFF6F7FB),
+
       appBar: AppBar(
+        elevation: 0,
         backgroundColor: Colors.transparent,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back_ios_new_rounded,color: Colors.black),
+          onPressed: (){
+            Get.back();
+          },
+        ),
+        title: const Text(
+          "Privacy Policy",
+          style: TextStyle(
+            color: Colors.black,
+            fontWeight: FontWeight.w700,
+          ),
+        ),
         centerTitle: true,
-        title: AppText(isEN ? "Privacy Policy" : "Datenschutzerklärung",fontSize: 20,fontWeight: FontWeight.w800,),
-        actions: [
-          TextButton(
-            onPressed: () {
-              setState(() {
-                lang = lang == "EN" ? "DE" : "EN";
-              });
-            },
-            child: Text(
-              lang == "EN" ? "DE" : "EN",
-              style: const TextStyle(color: Colors.white),
-            ),
-          )
-        ],
       ),
-      body: Column(
-        children: [
-          Expanded(
-            child: SingleChildScrollView(
-              padding: const EdgeInsets.all(16),
-              child: Text(
-                isEN
-                    ? """
-We value your privacy. This Privacy Policy explains how we collect, use, and protect your information when using this application.
 
-1. Data We Collect
-We may collect your name, email, account details, and uploaded files such as images or PDFs.
+      body: SingleChildScrollView(
+        padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 10),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: const [
 
-2. How We Use Data
-We use data to provide application functionality, improve performance, and ensure security.
-
-3. Data Sharing
-We do not sell personal data. Data may be shared only with trusted service providers necessary to run the application.
-
-4. Security
-We use industry-standard security practices to protect your data.
-
-5. Contact
-For privacy questions contact: privacy@yourdomain.com
-"""
-                    : """
-Wir respektieren Ihre Privatsphäre. Diese Datenschutzerklärung beschreibt, wie wir Ihre Daten erfassen und verwenden.
-
-1. Erhobene Daten
-Name, E-Mail, Kontodaten und hochgeladene Dateien können gespeichert werden.
-
-2. Verwendung
-Daten werden zur Bereitstellung der App-Funktionen und Sicherheit verwendet.
-
-3. Weitergabe
-Daten werden nicht verkauft und nur mit notwendigen Dienstleistern geteilt.
-
-4. Sicherheit
-Wir verwenden Sicherheitsmaßnahmen nach Industriestandards.
-
-5. Kontakt
-privacy@yourdomain.com
-""",
-                style: const TextStyle(fontSize: 14),
+            Text(
+              "Privacy Policy",
+              style: TextStyle(
+                fontSize: 22,
+                fontWeight: FontWeight.w800,
               ),
             ),
-          ),
-          Row(
-            children: [
-              Checkbox(
-                value: accepted,
-                onChanged: (v) {
-                  setState(() => accepted = v!);
-                },
-              ),
-              Expanded(
-                child: Text(isEN
-                    ? "I agree to Privacy Policy"
-                    : "Ich stimme der Datenschutzerklärung zu"),
-              )
-            ],
-          ),
-          Padding(
-            padding: const EdgeInsets.all(16),
-            child: SizedBox(
-              width: double.infinity,
-              child: ElevatedButton(
-                onPressed: accepted ? () => Navigator.pop(context) : null,
-                child: Text(isEN ? "Continue" : "Weiter"),
-              ),
+
+            SizedBox(height: 12),
+
+            Text(
+              "This application is designed to help administrators and employees manage construction sites, schedules, and documents efficiently. Your privacy is important to us and we are committed to protecting your personal data.",
+              style: TextStyle(fontSize: 14,height: 1.6),
             ),
-          )
-        ],
+
+            SizedBox(height: 20),
+
+            Text(
+              "Information We Collect",
+              style: TextStyle(fontSize: 16,fontWeight: FontWeight.w700),
+            ),
+
+            SizedBox(height: 6),
+
+            Text(
+              "We may collect basic user information such as name, email address, and assigned construction site information in order to provide proper access and functionality within the application.",
+              style: TextStyle(fontSize: 14,height: 1.6),
+            ),
+
+            SizedBox(height: 20),
+
+            Text(
+              "How We Use Information",
+              style: TextStyle(fontSize: 16,fontWeight: FontWeight.w700),
+            ),
+
+            SizedBox(height: 6),
+
+            Text(
+              "The collected information is used only for managing construction sites, assigning employees, sending notifications, and improving the overall experience of the application.",
+              style: TextStyle(fontSize: 14,height: 1.6),
+            ),
+
+            SizedBox(height: 20),
+
+            Text(
+              "Data Security",
+              style: TextStyle(fontSize: 16,fontWeight: FontWeight.w700),
+            ),
+
+            SizedBox(height: 6),
+
+            Text(
+              "We implement appropriate security measures to protect your data from unauthorized access, disclosure, or alteration.",
+              style: TextStyle(fontSize: 14,height: 1.6),
+            ),
+
+            SizedBox(height: 20),
+
+            Text(
+              "Contact",
+              style: TextStyle(fontSize: 16,fontWeight: FontWeight.w700),
+            ),
+
+            SizedBox(height: 6),
+
+            Text(
+              "If you have any questions regarding this Privacy Policy, please contact the administrator of the application.",
+              style: TextStyle(fontSize: 14,height: 1.6),
+            ),
+
+            SizedBox(height: 30),
+          ],
+        ),
       ),
     );
   }

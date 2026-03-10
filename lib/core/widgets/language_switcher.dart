@@ -29,7 +29,7 @@ class LanguageSwitcher extends StatelessWidget {
             width: 1,
             color: Colors.grey.shade300,
           ),
-          _item("Germany"),
+          _item("German"),
         ],
       ),
     );

@@ -1,6 +1,7 @@
 import 'package:get/get.dart';
 import 'package:pecan_construction/screens/employ_screens/controllers/bottom_nav_bar_controller.dart';
 
+import '../../screens/auth_screens/controllers/signup_controller.dart';
 import '../../screens/employ_screens/controllers/employee_home_controller.dart';
 import '../../screens/employ_screens/controllers/employee_notification_controller.dart';
 import '../../screens/employ_screens/controllers/site_screen_controller.dart';
@@ -13,6 +14,7 @@ class EmployeeBottomBinding  extends Bindings{
     Get.put<EmployeeSitesController>(EmployeeSitesController());
     Get.lazyPut<EmployeeHomeController>(() => EmployeeHomeController(),);
     Get.lazyPut<EmployeeNotificationController>(() => EmployeeNotificationController(),);
+    Get.lazyPut<SignUpController>(() => SignUpController(),);
 
   }
 

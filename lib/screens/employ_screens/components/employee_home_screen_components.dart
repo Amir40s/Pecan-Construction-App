@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:gap/gap.dart';
+import 'package:pecan_construction/core/models/site_model.dart';
 import 'package:sizer/sizer.dart';
-
+import 'package:flutter/cupertino.dart';
 import '../../../core/widgets/app_text.dart';
 import '../controllers/employee_home_controller.dart';
 
@@ -72,6 +73,92 @@ class EmployeeMonthHeaderRow extends StatelessWidget {
     "Jul","Aug","Sep","Oct","Nov","Dec"
   ];
 
+  void openMonthPicker(BuildContext context) {
+    showCupertinoModalPopup(
+      context: context,
+      builder: (_) {
+        int tempMonth = c.selectedMonth.value;
+
+        return Container(
+          height: 300,
+          color: Colors.white,
+          child: Column(
+            children: [
+
+              // Top bar with Done button
+              Container(
+                height: 50,
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                decoration: const BoxDecoration(
+                  border: Border(
+                    bottom: BorderSide(color: Color(0xffEAEAEA)),
+                  ),
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+
+                    TextButton(onPressed: () => Navigator.pop(context), child: Text(
+                      "Cancel",
+                      style: TextStyle(
+                        fontSize: 16,
+                        color: Colors.grey,
+                      ),
+                    ),),
+                   TextButton(onPressed: (){}, child:  const Text(
+                     "Select Month",
+                     style: TextStyle(
+                       fontSize: 16,
+                       fontWeight: FontWeight.w600,
+                     ),
+                   ),),
+
+                    TextButton(onPressed: () {
+                      c.setMonth(tempMonth);
+                      Navigator.pop(context);
+                    }, child: Text(
+        "Done",
+        style: TextStyle(
+        fontSize: 16,
+        fontWeight: FontWeight.w600,
+        color: Color(0xFFC22522),
+        ),
+        ),)
+                  ],
+                ),
+              ),
+
+              Expanded(
+                child: CupertinoPicker(
+                  itemExtent: 40,
+                  scrollController: FixedExtentScrollController(
+                    initialItem: c.selectedMonth.value - 1,
+                  ),
+                  onSelectedItemChanged: (index) {
+                    tempMonth = index + 1;
+                  },
+                  children: EmployeeMonthHeaderRow.months
+                      .map(
+                        (m) => Center(
+                      child: Text(
+                        m,
+                        style: const TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ),
+                  )
+                      .toList(),
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final border = Colors.grey.shade300;
@@ -82,6 +169,7 @@ class EmployeeMonthHeaderRow extends StatelessWidget {
 
       return Row(
         children: [
+           Gap(1.w),
           EmployeeHeaderArrow(
             icon: Icons.chevron_left_rounded,
             onTap: c.prevMonth,
@@ -90,8 +178,35 @@ class EmployeeMonthHeaderRow extends StatelessWidget {
           const Gap(10),
 
           // Month dropdown look
+          InkWell(
+            onTap: () => openMonthPicker(context),
+            child: Container(
+              width: 42.w,
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+              decoration: BoxDecoration(
+                border: Border.all(color: border),
+                borderRadius: BorderRadius.circular(10),
+                color: Colors.white,
+              ),
+              child: Row(
+                children: [
+                  AppText(
+                    months[monthIndex - 1],
+                    fontSize: 12.5,
+                    fontWeight: FontWeight.w800,
+                    color: Colors.black87,
+                  ),
+                  Spacer(),
+                  Icon(Icons.keyboard_arrow_down_rounded,
+                      size: 18, color: Colors.grey.shade700),
+                ],
+              ),
+            ),
+          ),
+
+          const Gap(10),
           Container(
-            width: 27.w,
+            width: 20.w,
             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
             decoration: BoxDecoration(
               border: Border.all(color: border),
@@ -101,43 +216,19 @@ class EmployeeMonthHeaderRow extends StatelessWidget {
             child: Row(
               children: [
                 AppText(
-                  months[monthIndex - 1],
+                  year.toString(),
                   fontSize: 12.5,
                   fontWeight: FontWeight.w800,
                   color: Colors.black87,
                 ),
-                Spacer(),
-                Icon(Icons.keyboard_arrow_down_rounded,
-                    size: 18, color: Colors.grey.shade700),
               ],
             ),
           ),
 
-SizedBox(width: 8.w,),
+
           // Year dropdown look
-          Container(
-            width: 27.w,
-            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-            decoration: BoxDecoration(
-              border: Border.all(color: border),
-              borderRadius: BorderRadius.circular(10),
-              color: Colors.white,
-            ),
-            child: Row(
-              children: [
-                AppText(
-                  "$year",
-                  fontSize: 12.5,
-                  fontWeight: FontWeight.w800,
-                  color: Colors.black87,
-                ),
-               Spacer(),
-                Icon(Icons.keyboard_arrow_down_rounded,
-                    size: 18, color: Colors.grey.shade700),
-              ],
-            ),
-          ),
-          SizedBox(width: 7.w,),
+
+          SizedBox(width: 10,),
           EmployeeHeaderArrow(
             icon: Icons.chevron_right_rounded,
             onTap: c.nextMonth,
@@ -188,6 +279,9 @@ class EmployeeMonthCalendarGrid extends StatelessWidget {
     const red = Color(0xFFC22522);
 
     return Obx(() {
+      // 👇 rebuild when sites change
+      final _ = c.sites.length;
+
       final year = c.selectedYear.value;
       final month = c.selectedMonth.value;
       final selectedDay = c.selectedDay.value;
@@ -195,8 +289,6 @@ class EmployeeMonthCalendarGrid extends StatelessWidget {
       final firstDay = DateTime(year, month, 1);
       final daysInMonth = DateTime(year, month + 1, 0).day;
 
-      // DateTime.weekday: Mon=1..Sun=7
-      // We want Sunday-start grid => offset: Sun=0, Mon=1, ... Sat=6
       final int leadingEmpty = firstDay.weekday % 7;
 
       final totalCells = leadingEmpty + daysInMonth;
@@ -207,7 +299,7 @@ class EmployeeMonthCalendarGrid extends StatelessWidget {
 
       return Column(
         children: [
-          // Weekday labels
+          /// Week labels
           Row(
             children: weekLabels
                 .map(
@@ -224,8 +316,10 @@ class EmployeeMonthCalendarGrid extends StatelessWidget {
             )
                 .toList(),
           ),
+
           const Gap(8),
 
+          /// Calendar grid
           GridView.builder(
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
@@ -245,20 +339,50 @@ class EmployeeMonthCalendarGrid extends StatelessWidget {
 
               final isSelected = dayNumber == selectedDay;
 
+              /// 👇 site status check
+              final status = c.getSiteStatusForDay(dayNumber);
+
+              Color? indicatorColor;
+
+              if (status == "completed") {
+                indicatorColor = Colors.green;
+              } else if (status == "active") {
+                indicatorColor = Colors.red;
+              } else if (status == "paused") {
+                indicatorColor = Colors.grey;
+              }
+
               return InkWell(
                 borderRadius: BorderRadius.circular(10),
                 onTap: () => c.pickDay(dayNumber),
                 child: Container(
-                  alignment: Alignment.center,
                   decoration: BoxDecoration(
                     color: isSelected ? red : Colors.transparent,
                     borderRadius: BorderRadius.circular(10),
                   ),
-                  child: AppText(
-                    "$dayNumber",
-                    fontSize: 12.5,
-                    fontWeight: FontWeight.w800,
-                    color: isSelected ? Colors.white : Colors.black87,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      /// Day number
+                      AppText(
+                        "$dayNumber",
+                        fontSize: 12.5,
+                        fontWeight: FontWeight.w800,
+                        color: isSelected ? Colors.white : Colors.black87,
+                      ),
+
+                      /// Indicator
+                      if (indicatorColor != null)
+                        Container(
+                          margin: const EdgeInsets.only(top: 2),
+                          width: 6,
+                          height: 6,
+                          decoration: BoxDecoration(
+                            color: indicatorColor,
+                            shape: BoxShape.circle,
+                          ),
+                        ),
+                    ],
                   ),
                 ),
               );
@@ -267,103 +391,5 @@ class EmployeeMonthCalendarGrid extends StatelessWidget {
         ],
       );
     });
-  }
-}
-
-class EmployeeSiteItemWidget extends StatelessWidget {
-  final EmployeeSiteItem site;
-  final VoidCallback onView;
-
-  const EmployeeSiteItemWidget({
-    super.key,
-    required this.site,
-    required this.onView,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    const red = Color(0xFFC22522);
-    final border = Colors.grey.shade300;
-
-    return Container(
-      margin: const EdgeInsets.only(bottom: 10),
-      padding: const EdgeInsets.all(12),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        border: Border.all(color: border),
-        borderRadius: BorderRadius.circular(14),
-      ),
-      child: Row(
-        children: [
-          // Left text
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                AppText(
-                  site.title,
-                  fontSize: 13.5,
-                  fontWeight: FontWeight.w800,
-                  color: Colors.black87,
-                ),
-                const Gap(4),
-                AppText(
-                  site.subtitle,
-                  fontSize: 11.5,
-                  fontWeight: FontWeight.w600,
-                  color: Colors.grey.shade600,
-                ),
-                const Gap(10),
-                Row(
-                  children: [
-                    InkWell(
-                      borderRadius: BorderRadius.circular(10),
-                      onTap: onView,
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 12, vertical: 8),
-                        decoration: BoxDecoration(
-                          color: red,
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        child: AppText(
-                          site.buttonText,
-                          fontSize: 11.5,
-                          fontWeight: FontWeight.w800,
-                          color: Colors.white,
-                        ),
-                      ),
-                    ),
-                    const Gap(10),
-                    Container(
-                      width: 28,
-                      height: 28,
-                      decoration: BoxDecoration(
-                        color: Colors.grey.shade200,
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      child: const Icon(Icons.info_outline_rounded, size: 18),
-                    ),
-                  ],
-                ),
-              ],
-            ),
-          ),
-
-          const Gap(10),
-
-          // Right image
-          ClipRRect(
-            borderRadius: BorderRadius.circular(12),
-            child: Image.asset(
-              site.imageAsset,
-              width: 26.w,
-              height: 12.h,
-              fit: BoxFit.cover,
-            ),
-          ),
-        ],
-      ),
-    );
   }
 }
