@@ -18,7 +18,6 @@ class BottomNavScreen extends StatelessWidget {
   final List<Widget> screenList = [
     AdminHomeScreen(),
     SiteScreen(),
-    NotificationScreen(),
     ProfileScreen(),
   ];
 
@@ -64,15 +63,6 @@ class BottomNavScreen extends StatelessWidget {
                     : const Color(0xffDC9291),
               ),
               label: "Sites",
-            ),
-            BottomNavigationBarItem(
-              icon: SvgPicture.asset(
-                AppIcons.bellIcon,
-                color: controller.currentIndex.value == 2
-                    ? const Color(0xffC22522)
-                    : const Color(0xffDC9291),
-              ),
-              label: "Notification",
             ),
             BottomNavigationBarItem(
               icon: SvgPicture.asset(

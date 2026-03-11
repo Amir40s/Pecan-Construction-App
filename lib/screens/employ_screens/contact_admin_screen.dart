@@ -24,7 +24,7 @@ class ContactAdminScreen extends StatefulWidget {
 
 class _ContactAdminScreenState extends State<ContactAdminScreen> {
   final TextEditingController messageController = TextEditingController();
-  final adminC = Get.find<AdminLoginController>();
+  final adminC = Get.put(AdminLoginController());
   bool isSending = false;
   late final controller = Get.put(
     ContactAdminController(

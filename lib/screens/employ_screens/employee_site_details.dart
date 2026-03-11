@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:pecan_construction/config/routes/routes_name.dart';
 import 'package:pecan_construction/core/constant/app_icons.dart';
 import 'package:pecan_construction/core/constant/app_images.dart';
+import 'package:pecan_construction/core/services/string_translation_extension.dart';
 import 'package:pecan_construction/core/widgets/header_widget.dart';
 import '../../core/widgets/app_text.dart';
 import 'components/employeeSiteDetails_components.dart';
@@ -19,7 +20,6 @@ class EmployeeSiteDetailsScreen extends GetView<EmployeeSiteDetailsController> {
     final textPrimary = const Color(0xFF111827);
     final textSecondary = const Color(0xFF6B7280);
     final border = const Color(0xFFE5E7EB);
-    const red = Color(0xFFC22522);
 
     return Scaffold(
       backgroundColor: bg,
@@ -36,10 +36,11 @@ class EmployeeSiteDetailsScreen extends GetView<EmployeeSiteDetailsController> {
                     CustomHeader(
                       title: "site_details".tr,
                       showBack: true,
-                    ),                    const SizedBox(height: 12),
+                    ),
+                    const SizedBox(height: 12),
           SiteStatusRow(
-          title: controller.siteTitle.toString(),
-          subtitle: controller.siteDescription.toString(),
+          title: controller.siteTitle.toString().trn,
+          subtitle: controller.siteDescription.toString().trn,
 
           status: controller.siteStatus.value.trim().toLowerCase() == "active"
           ? "Active"
@@ -186,7 +187,7 @@ class EmployeeSiteDetailsScreen extends GetView<EmployeeSiteDetailsController> {
                         border: Border.all(color: border),
                       ),
                       child: AppText(
-                        controller.siteNote.value,
+                        controller.siteNote.value.trn,
                         color: textSecondary,
                         fontSize: 14,
                         fontWeight: FontWeight.w600,
@@ -363,7 +364,7 @@ class _NameChip extends StatelessWidget {
   final Color border;
   final Color textColor;
 
-  const _NameChip({
+  const  _NameChip({
     required this.name,
     required this.border,
     required this.textColor,

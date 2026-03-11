@@ -169,5 +169,13 @@ const Map<String, String> de = {
   "no_staff_assigned": "Keine Mitarbeiter zugewiesen",
   "no_description_available": "Keine Beschreibung verfügbar",
   "no_attachments_found": "Keine Anhänge gefunden",
-  "na": "N/V"
+  "na": "N/V",
+
+  'close': 'Schließen',
+
+
+  "admin_uploads": "Admin Uploads",
+  "employee_photos": "Mitarbeiterfotos",
+  "no_photos_yet": "Noch keine Fotos",
+  "employee_photo": "Mitarbeiterfoto",
 };

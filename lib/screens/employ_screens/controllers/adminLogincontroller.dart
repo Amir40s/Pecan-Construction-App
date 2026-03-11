@@ -25,7 +25,7 @@ class AdminLoginController extends GetxController {
   final FirebaseStorage _storage = FirebaseStorage.instance;
   final ImagePicker _picker = ImagePicker();
   final GetStorage _box = GetStorage();
-
+  RxBool isPasswordVisible = true.obs;
   static const String _adminSessionKey = 'admin_session';
 
   RxString adminDocId = ''.obs;
@@ -51,6 +51,10 @@ class AdminLoginController extends GetxController {
       _checkProfileChanges();
       update();
     });
+  }
+
+  void togglePassword () {
+    isPasswordVisible.value = !isPasswordVisible.value;
   }
 
   void _saveAdminToStorage() {

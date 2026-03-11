@@ -1,4 +1,6 @@
 import 'dart:async';
+import 'dart:ui';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../../core/models/site_model.dart';
 import '../../../core/repo/site_repository.dart';
@@ -69,6 +71,42 @@ class EmployeeHomeController extends GetxController {
     return "$y-$m-$d";
   }
 
+  List<String> getSiteStatusesForDay(int day) {
+
+    List<String> statuses = [];
+
+    for (var site in sites) {
+
+      final siteDate = DateTime.tryParse(site.siteStartDate ?? "");
+      if (siteDate == null) continue;
+
+      if (siteDate.year == selectedYear.value &&
+          siteDate.month == selectedMonth.value &&
+          siteDate.day == day) {
+
+        statuses.add(site.siteStatus.toLowerCase());
+      }
+    }
+
+    return statuses;
+  }
+
+  Color getStatusColor(String status) {
+
+    switch (status) {
+      case "active":
+        return Colors.redAccent;
+
+      case "paused":
+        return Colors.orange;
+
+      case "completed":
+        return Colors.green;
+
+      default:
+        return Colors.grey;
+    }
+  }
 
   void setMonth(int month) {
     selectedMonth.value = month;

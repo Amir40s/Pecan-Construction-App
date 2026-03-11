@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 import 'package:pecan_construction/config/routes/routes_name.dart';
+import 'package:pecan_construction/core/services/string_translation_extension.dart';
 import 'package:pecan_construction/core/widgets/app_buttons.dart';
 import 'package:pecan_construction/screens/auth_screens/controllers/signup_controller.dart';
 import 'package:sizer/sizer.dart';
@@ -176,7 +177,7 @@ class EmployHomeScreens extends GetView<EmployeeHomeController> {
                                           children: [
                                             Gap(1.h),
                                             AppText(
-                                              s.siteName,
+                                              s.siteName.trn,
                                               overflow: TextOverflow.ellipsis,
                                               maxLines: 1,
                                               fontSize: 16,
@@ -184,7 +185,7 @@ class EmployHomeScreens extends GetView<EmployeeHomeController> {
                                             ),
                                             Gap(0.5.h),
                                             AppText(
-                                              (s.siteDescription!),
+                                              (s.siteDescription!.trn),
 
                                               fontSize: 14,
                                               fontWeight: FontWeight.w600,

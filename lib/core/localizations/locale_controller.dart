@@ -9,7 +9,7 @@ class LocaleController extends GetxController {
   RxString languageCode = "en".obs;
 
   Locale get locale => Locale(languageCode.value);
-
+  bool get isGerman => languageCode.value == "de";
   @override
   void onInit() {
     loadSavedLanguage();

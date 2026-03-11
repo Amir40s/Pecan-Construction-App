@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:pecan_construction/core/services/string_translation_extension.dart';
 import '../../../config/routes/routes_name.dart';
 import '../../../core/models/notification_model.dart';
 
@@ -133,7 +134,7 @@ class EmployeeNotificationController extends GetxController {
 
               /// title
               Text(
-                item.title,
+                item.title.trn,
                 textAlign: TextAlign.center,
                 style: const TextStyle(
                   fontSize: 18,
@@ -145,7 +146,7 @@ class EmployeeNotificationController extends GetxController {
 
               /// body
               Text(
-                item.subtitle,
+                item.subtitle.trn,
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: 14,
@@ -180,8 +181,8 @@ class EmployeeNotificationController extends GetxController {
                   onPressed: () {
                     Get.back();
                   },
-                  child: const Text(
-                    "Close",
+                  child:  Text(
+                    "close".tr,
                     style: TextStyle(
                       fontWeight: FontWeight.w600,
                       color: Colors.white

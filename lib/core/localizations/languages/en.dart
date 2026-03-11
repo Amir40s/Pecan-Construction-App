@@ -169,6 +169,13 @@ const Map<String, String> en = {
   "no_staff_assigned": "No staff assigned",
   "no_description_available": "No description available",
   "no_attachments_found": "No attachments found",
-  "na": "N/A"
+  "na": "N/A",
+  'close': 'Close',
+
+
+  "admin_uploads": "Admin Uploads",
+  "employee_photos": "Employee Photos",
+  "no_photos_yet": "No photos yet",
+  "employee_photo": "Employee Photo",
 
 };

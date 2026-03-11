@@ -16,12 +16,11 @@ import 'firebase_options.dart';
 
 
 Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
-
   await Firebase.initializeApp();
-
   print("Background Notification: ${message.notification?.title}");
-
 }
+
+final TranslationService translationService = TranslationService();
 
 void main()  async{
 
@@ -37,9 +36,8 @@ void main()  async{
   final NotificationService notificationService = NotificationService();
   await notificationService.setup();
 
-  await Get.putAsync(() => TranslationService().init());
-  Get.put(LocaleController());
 
+  await translationService.init();
   runApp(const MyApp());
 }
 

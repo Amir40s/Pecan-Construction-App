@@ -47,7 +47,7 @@ class AttachmentsScreen extends GetView<AttachmentsController> {
                       ),
                     ),
                     SizedBox(width: 20.w,),
-                    AppText("Attachments", fontSize: 20,fontWeight: FontWeight.w800,)
+                    AppText( "attachments".tr, fontSize: 20,fontWeight: FontWeight.w800,)
                   ],
                 ),
                 Spacer(),
@@ -79,7 +79,7 @@ class AttachmentsScreen extends GetView<AttachmentsController> {
                   children: [
                     // Recent Uploads
                     AppText(
-                      "Admin Uploads",
+                      "admin_uploads".tr,
                       color: textPrimary,
                       fontSize: 16,
                       fontWeight: FontWeight.w800,
@@ -113,7 +113,7 @@ class AttachmentsScreen extends GetView<AttachmentsController> {
                     ),
                     SizedBox(height: 2.h),
                     AppText(
-                      "Employee Photos",
+                      "employee_photos".tr,
                       fontSize: 16,
                       fontWeight: FontWeight.w800,
                     ),
@@ -122,7 +122,7 @@ class AttachmentsScreen extends GetView<AttachmentsController> {
                       final photos = controller.employeePhotos;
 
                       if (photos.isEmpty) {
-                        return const Center(child: Text("No photos yet"));
+                        return  Center(child: Text("no_photos_yet".tr));
                       }
 
                       return GridView.builder(
@@ -144,7 +144,7 @@ class AttachmentsScreen extends GetView<AttachmentsController> {
                               Get.to(() => FullScreenImagePreview(
                                 att: SiteAttachment(
                                   id: url,
-                                  title: "Employee Photo",
+                                  title: "employee_photo".tr,
                                   subtitle: "",
                                   type: AttachmentType.image,
                                   thumbPathOrUrl: url,

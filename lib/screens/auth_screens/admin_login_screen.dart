@@ -83,20 +83,32 @@ class adminLoginScreen extends GetView<AdminLoginController> {
                         SizedBox(height : 3.h),
                         AppText("password".tr, fontSize: 16,fontWeight: FontWeight.w800,color: Colors.black,),
                         SizedBox(height: 1.h,),
-                        AppFormField(
-                          validator: (value){
-                            if(value!.isEmpty)return "password_required".tr;
-                            if(value.length < 6) return "password_required".tr;
-                            return null;
-                          },
-                          preficIconwidth: 10,
-                          prefixIconheight: 10,
-                          prefic_icons: SvgPicture.asset(AppIcons.lockIcon,),
-                          showPretixIcon: true,
-                          title: "******",
-                          textEditingController: controller.passwordC,
-                          showBorder: true,
-                          borderColor: Color(0xffDC9291),
+                        Obx((){
+                          return AppFormField(
+                            validator: (value){
+                              if(value!.isEmpty)return "password_required".tr;
+                              if(value.length < 6) return "password_required".tr;
+                              return null;
+                            },
+                            preficIconwidth: 10,
+                            prefixIconheight: 10,
+                            prefic_icons: SvgPicture.asset(AppIcons.lockIcon,),
+                            showPretixIcon: true,
+                            iconWidget: InkWell(
+                              onTap:  controller.togglePassword,
+                              child: Icon(
+                                controller.isPasswordVisible.value ?
+                                Icons.visibility_off :
+                                Icons.visibility_sharp, color: Colors.redAccent,),
+                            ),
+
+                            isObsecured: controller.isPasswordVisible.value,
+                            title: "******",
+                            textEditingController: controller.passwordC,
+                            showBorder: true,
+                            borderColor: Color(0xffDC9291),
+                          );
+                        }
                         ),
 
                         SizedBox(height: 4.h,),

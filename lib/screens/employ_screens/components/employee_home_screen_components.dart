@@ -340,15 +340,14 @@ class EmployeeMonthCalendarGrid extends StatelessWidget {
               final isSelected = dayNumber == selectedDay;
 
               /// 👇 site status check
-              final status = c.getSiteStatusForDay(dayNumber);
-
+              final statuses = c.getSiteStatusesForDay(dayNumber);
               Color? indicatorColor;
 
-              if (status == "completed") {
+              if (statuses == "completed") {
                 indicatorColor = Colors.green;
-              } else if (status == "active") {
+              } else if (statuses == "active") {
                 indicatorColor = Colors.red;
-              } else if (status == "paused") {
+              } else if (statuses == "paused") {
                 indicatorColor = Colors.grey;
               }
 
@@ -372,16 +371,22 @@ class EmployeeMonthCalendarGrid extends StatelessWidget {
                       ),
 
                       /// Indicator
-                      if (indicatorColor != null)
-                        Container(
-                          margin: const EdgeInsets.only(top: 2),
-                          width: 6,
-                          height: 6,
-                          decoration: BoxDecoration(
-                            color: indicatorColor,
-                            shape: BoxShape.circle,
-                          ),
-                        ),
+                      statuses.isEmpty
+                          ? const SizedBox()
+                          : Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: statuses.map((status) {
+                          return Container(
+                            margin: const EdgeInsets.symmetric(horizontal: 1),
+                            width: 6,
+                            height: 6,
+                            decoration: BoxDecoration(
+                              color: c.getStatusColor(status),
+                              shape: BoxShape.circle,
+                            ),
+                          );
+                        }).toList(),
+                      )
                     ],
                   ),
                 ),

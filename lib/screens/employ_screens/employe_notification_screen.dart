@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:gap/gap.dart';
+import 'package:pecan_construction/core/services/string_translation_extension.dart';
 
 import '../../core/models/notification_model.dart';
 import '../../core/widgets/app_text.dart';
@@ -179,7 +180,7 @@ class _NotificationTile extends StatelessWidget {
 
                       Expanded(
                         child: AppText(
-                          item.title,
+                          item.title.trn,
                           fontSize: 16,
                           fontWeight: FontWeight.w700,
                           color: Colors.black87,
@@ -206,7 +207,7 @@ class _NotificationTile extends StatelessWidget {
 
                   /// Body
                   AppText(
-                    item.subtitle,
+                    item.subtitle.trn,
                     fontSize: 13,
                     color: Colors.grey.shade700,
                     maxLines: 2,
@@ -220,7 +221,7 @@ class _NotificationTile extends StatelessWidget {
 
             /// Time
             AppText(
-              item.timeLabel,
+              item.timeLabel.trn,
               fontSize: 11,
               fontWeight: FontWeight.w600,
               color: Colors.grey.shade500,

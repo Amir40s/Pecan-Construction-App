@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:gap/gap.dart';
 import 'package:pecan_construction/config/routes/routes_name.dart';
 import 'package:pecan_construction/core/constant/app_images.dart';
+import 'package:pecan_construction/core/services/string_translation_extension.dart';
 import 'package:sizer/sizer.dart';
 
 import '../../core/models/site_model.dart';
@@ -217,7 +218,7 @@ class EmployeeSitesScreen extends GetView<EmployeeSitesController> {
                                       ),
                                       const Gap(6),
                                       AppText(
-                                        site.siteStatus.capitalizeFirst ?? site.siteStatus,
+                                        site.siteStatus.capitalizeFirst ?? site.siteStatus.trn,
                                         color: textSecondary,
                                         fontSize: 11.5,
                                         fontWeight: FontWeight.w700,
@@ -227,7 +228,7 @@ class EmployeeSitesScreen extends GetView<EmployeeSitesController> {
                                   const Gap(6),
 
                                   AppText(
-                                    site.siteName,
+                                    site.siteName.trn,
                                     color: textPrimary,
                                     fontSize: 16,
                                     fontWeight: FontWeight.w800,
@@ -235,7 +236,7 @@ class EmployeeSitesScreen extends GetView<EmployeeSitesController> {
                                   const Gap(4),
                                   AppText(
                                     maxLines: 1,
-                                    site.siteDescription.toString() ?? "",
+                                    site.siteDescription.toString().trn ?? "",
                                     color: textSecondary,
                                     fontSize: 14,
                                     fontWeight: FontWeight.w600,
