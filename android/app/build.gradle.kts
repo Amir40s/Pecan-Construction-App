@@ -6,7 +6,7 @@ plugins {
 }
 
 android {
-    namespace = "com.example.pecan_construction"
+    namespace = "com.solinovation.pecanapp"
     compileSdk = 36
     ndkVersion = "28.2.13676358"
 
