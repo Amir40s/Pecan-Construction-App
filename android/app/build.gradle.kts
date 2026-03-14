@@ -24,7 +24,7 @@ android {
     }
 
     defaultConfig {
-        applicationId = "com.example.pecan_construction"
+        applicationId = "com.solinovation.pecanapp"
         minSdk = flutter.minSdkVersion
         targetSdk = 34
         versionCode = 1

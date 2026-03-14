@@ -4,7 +4,6 @@ import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 import 'package:pecan_construction/screens/employ_screens/controllers/adminLogincontroller.dart';
 import 'package:sizer/sizer.dart';
-
 import '../../core/constant/app_images.dart';
 import 'controllers/ContactAdminController.dart';
 
@@ -14,7 +13,6 @@ class ContactAdminScreen extends StatefulWidget {
     this.adminEmail = "info@gmail.com",
     this.adminPhone = "+92 300 1234567",
   });
-
   final String adminEmail;
   final String adminPhone;
 
@@ -48,7 +46,6 @@ class _ContactAdminScreenState extends State<ContactAdminScreen> {
       );
       return;
     }
-
     setState(() => isSending = true);
 
     // mailto with prefilled TO + subject + body

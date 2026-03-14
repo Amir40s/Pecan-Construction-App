@@ -1,4 +1,4 @@
-package com.example.pecan_construction
+package com.solinovation.pecanapp
 
 import io.flutter.embedding.android.FlutterActivity
 

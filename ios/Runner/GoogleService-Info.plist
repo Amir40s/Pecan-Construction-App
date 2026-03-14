@@ -9,7 +9,7 @@
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>com.example.pecanConstruction</string>
+	<string>com.solinovation.pecanapp</string>
 	<key>PROJECT_ID</key>
 	<string>pecan-app-a258c</string>
 	<key>STORAGE_BUCKET</key>
@@ -25,6 +25,6 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:681812156155:ios:bab8a996662b3f25ed9a5e</string>
+	<string>1:681812156155:ios:745b8d7e9eebcf58ed9a5e</string>
 </dict>
 </plist>
