@@ -216,6 +216,25 @@ class SettingsScreen extends StatelessWidget {
               const Gap(22),
 
               // Logout button
+              Obx( () {
+                  return AppButtonWidget(
+                    prefixIcon: Icon(Icons.delete,color: Colors.white,),
+                      onPressed: (){
+                     notificationController.deleteAccount();
+                      },
+                      fontSize: 18,
+                    loader: notificationController.isLogging.value,
+
+                    fontWeight: FontWeight.w600,
+                      width: 95.w,
+                      height: 6.h,
+                      buttonColor: Color(0xffC22522),
+                    text: "Delete Account".tr,);
+                }
+              ),
+              const Gap(22),
+
+              // Logout button
               AppButtonWidget(
                 prefixIcon: Icon(Icons.logout,color: Colors.white,),
                   onPressed: (){
