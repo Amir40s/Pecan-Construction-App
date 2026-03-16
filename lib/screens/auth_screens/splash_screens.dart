@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:pecan_construction/core/constant/app_images.dart';
 import 'package:pecan_construction/core/widgets/app_text.dart';
+import 'package:pecan_construction/screens/auth_screens/controllers/splash_controller.dart';
 import 'package:sizer/sizer.dart';
 
 import '../../config/routes/routes_name.dart';
@@ -15,16 +16,12 @@ class SplashScreen extends StatefulWidget {
 
 class _SplashScreenState extends State<SplashScreen> {
 
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    Future.delayed(Duration(seconds: 2)  ,(){
-      return Get.offNamed(RoutesName.RoleSelectionScreen);
-    });
-  }
+  final c = Get.put(Splash_Controller());
   @override
   Widget build(BuildContext context) {
+    Future.delayed( Duration(seconds: 2), () {
+      c.checkLogin();
+    });
     return Scaffold(
       body: SafeArea(
         child: Padding(
