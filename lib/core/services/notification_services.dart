@@ -164,6 +164,13 @@ class NotificationService {
 
     await requestPermission();
 
+    await FirebaseMessaging.instance
+        .setForegroundNotificationPresentationOptions(
+      alert: true,
+      badge: true,
+      sound: true,
+    );
+
     await saveTokenToFirestore();
 
     tokenRefresh();
