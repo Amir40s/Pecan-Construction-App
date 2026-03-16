@@ -43,6 +43,7 @@ class NotificationService {
         .doc(user.uid)
         .set({
       "fcmToken": token,
+      "isNotificationEnabled" : true
     }, SetOptions(merge: true));
   }
 

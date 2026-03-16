@@ -47,23 +47,27 @@ class EmployHomeScreens extends GetView<EmployeeHomeController> {
                               borderColor: Colors.white,
                             )),
                         SizedBox(width: 3.w),
-                        Obx(
-                          () => Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              AppText(
-                                "welcome".tr,
-                                fontSize: 12,
-                                fontWeight: FontWeight.w600,
-                                color: const Color(0xff979796),
-                              ),
-                              AppText(
-                                profileController.employeeName.value,
-                                fontSize: 20,
-                                fontWeight: FontWeight.w700,
-                                color: Colors.black87,
-                              ),
-                            ],
+                        Expanded(
+                          child: Obx(
+                            () => Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                AppText(
+                                  "welcome".tr,
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.w600,
+                                  color: const Color(0xff979796),
+                                ),
+                                AppText(
+                                  profileController.employeeName.value,
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.w700,
+                                  color: Colors.black87,
+                                  overflow: TextOverflow.ellipsis,
+                                  maxLines: 1,
+                                ),
+                              ],
+                            ),
                           ),
                         ),
                       ],
@@ -85,6 +89,7 @@ class EmployHomeScreens extends GetView<EmployeeHomeController> {
                       padding: const EdgeInsets.all(12),
                       decoration: BoxDecoration(
                         color: Colors.white,
+
                         border: Border.all(color: const Color(0xffEAEAEA)),
                         borderRadius: BorderRadius.circular(14),
                       ),
@@ -150,8 +155,6 @@ class EmployHomeScreens extends GetView<EmployeeHomeController> {
 
                                 final buttonText = isVisited ? "resume".tr : "check_in".tr;
                                 return Container(
-                                  width: 95.w,
-                                  height: 15.h,
                                   margin:
                                       const EdgeInsets.symmetric(vertical: 8),
                                   padding: const EdgeInsets.all(8),
@@ -168,62 +171,58 @@ class EmployHomeScreens extends GetView<EmployeeHomeController> {
                                     ],
                                   ),
                                   child: Row(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
                                       Expanded(
                                         flex: 2,
                                         child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
+                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          // mainAxisAlignment: MainAxisAlignment.start,
+                                          // mainAxisSize: MainAxisSize.min,
                                           children: [
                                             Gap(1.h),
                                             AppText(
                                               s.siteName.trn,
                                               overflow: TextOverflow.ellipsis,
-                                              maxLines: 1,
+                                              maxLines: 2,
                                               fontSize: 16,
                                               fontWeight: FontWeight.w800,
                                             ),
                                             Gap(0.5.h),
                                             AppText(
                                               (s.siteDescription!.trn),
-
                                               fontSize: 14,
                                               fontWeight: FontWeight.w600,
                                               color: Colors.grey.shade600,
                                               overflow: TextOverflow.ellipsis,
-                                              maxLines: 1,
+                                              maxLines: 3,
                                             ),
                                             Gap(1.5.h),
-                                            Row(
-                                              children: [
+                                            AppButtonWidget(
+                                              onPressed: () {
+                                                log(s.siteId);
 
-                                  AppButtonWidget(
-                                  onPressed: () {
-                                log(s.siteId);
+                                                if (!isVisited) {
+                                                  c.markSiteViewed(s.siteId);
+                                                }
 
-                                if (!isVisited) {
-                                c.markSiteViewed(s.siteId);
-                                }
-
-                                Get.toNamed(
-                                RoutesName.EmployeeSiteDetailsScreen,
-                                arguments: {"siteId": s.siteId},
-                                );
-                                },
-                                  text: buttonText,
-                                  width: 30.w,
-                                  height: 4.h,
-                                  buttonColor: isVisited
-                                      ? const Color(0xffF2CFCE)
-                                      : const Color(0xffC22522),
-                                ),
-                                                Gap(0.5.h),
-                                              ],
+                                                Get.toNamed(
+                                                  RoutesName.EmployeeSiteDetailsScreen,
+                                                  arguments: {"siteId": s.siteId},
+                                                );
+                                              },
+                                              text: buttonText,
+                                              width: 30.w,
+                                              height: 4.h,
+                                              buttonColor: isVisited
+                                                  ? const Color(0xffF2CFCE)
+                                                  : const Color(0xffC22522),
                                             ),
+                                            Gap(0.5.h),
                                           ],
                                         ),
                                       ),
-                                      Gap(0.5.h),
+                                      Gap(2.w),
                                       Expanded(
                                         flex: 1,
                                         child: ClipRRect(

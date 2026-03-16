@@ -181,7 +181,7 @@ class EmployeeMonthHeaderRow extends StatelessWidget {
           InkWell(
             onTap: () => openMonthPicker(context),
             child: Container(
-              width: 42.w,
+              width: 40.w,
               padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
               decoration: BoxDecoration(
                 border: Border.all(color: border),
