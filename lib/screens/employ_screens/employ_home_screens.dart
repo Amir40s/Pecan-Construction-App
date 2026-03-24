@@ -172,15 +172,15 @@ class EmployHomeScreens extends GetView<EmployeeHomeController> {
                                   ),
                                   child: Row(
                                     crossAxisAlignment: CrossAxisAlignment.start,
+                                    // mainAxisAlignment: MainAxisAlignment.start,
                                     children: [
                                       Expanded(
                                         flex: 2,
                                         child: Column(
-                                          crossAxisAlignment: CrossAxisAlignment.start,
-                                          // mainAxisAlignment: MainAxisAlignment.start,
-                                          // mainAxisSize: MainAxisSize.min,
+                                          crossAxisAlignment: CrossAxisAlignment.start, // Left align
+                                          mainAxisSize: MainAxisSize.min,               // Take only needed height
                                           children: [
-                                            Gap(1.h),
+                                            // Site Name
                                             AppText(
                                               s.siteName.trn,
                                               overflow: TextOverflow.ellipsis,
@@ -188,17 +188,24 @@ class EmployHomeScreens extends GetView<EmployeeHomeController> {
                                               fontSize: 16,
                                               fontWeight: FontWeight.w800,
                                             ),
-                                            Gap(0.5.h),
+
+                                            SizedBox(height: 4), // Small gap instead of large Gap
+
+                                            // Site Description
                                             AppText(
-                                              (s.siteDescription!.trn),
+                                              s.siteDescription!.trn,
                                               fontSize: 14,
                                               fontWeight: FontWeight.w600,
                                               color: Colors.grey.shade600,
                                               overflow: TextOverflow.ellipsis,
                                               maxLines: 3,
                                             ),
-                                            Gap(1.5.h),
+
+                                            SizedBox(height: 12), // Small gap
+
+                                            // Button
                                             AppButtonWidget(
+                                              alignment: Alignment.centerLeft,
                                               onPressed: () {
                                                 log(s.siteId);
 
@@ -214,11 +221,8 @@ class EmployHomeScreens extends GetView<EmployeeHomeController> {
                                               text: buttonText,
                                               width: 30.w,
                                               height: 4.h,
-                                              buttonColor: isVisited
-                                                  ? const Color(0xffF2CFCE)
-                                                  : const Color(0xffC22522),
+                                              buttonColor: isVisited ? const Color(0xffF2CFCE) : const Color(0xffC22522),
                                             ),
-                                            Gap(0.5.h),
                                           ],
                                         ),
                                       ),

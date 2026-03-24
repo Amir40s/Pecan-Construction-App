@@ -161,7 +161,7 @@ class SettingsScreen extends StatelessWidget {
               const Gap(10),
               GestureDetector(
                 onTap: (){
-                  Get.toNamed(RoutesName.PrivacyPolicyScreen);
+                  notificationController.openPrivacyPolicy();
                 },
                 child: Container(
                   width: 95.w,
@@ -188,7 +188,8 @@ class SettingsScreen extends StatelessWidget {
               Gap(12),
               GestureDetector(
                 onTap: (){
-                  Get.toNamed(RoutesName.TermsConditionsScreen);
+                  notificationController.openTermsAndConditions();
+
                 },
                 child: Container(
                   width: 95.w,
@@ -204,6 +205,34 @@ class SettingsScreen extends StatelessWidget {
                       Gap(3.w),
                       AppText(
                         "terms_conditions".tr,
+                        color: Colors.black87,
+                        fontWeight: FontWeight.bold,
+                      ),                      Spacer(),
+                      Icon(Icons.arrow_forward_ios_rounded)
+                    ],
+                  ),
+                ),
+              ),
+
+              Gap(12),
+              GestureDetector(
+                onTap: (){
+                  notificationController.openeula();
+                },
+                child: Container(
+                  width: 95.w,
+                  height: 7.h,
+                  padding: EdgeInsets.symmetric(horizontal: 12),
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(12),
+                      border: BoxBorder.all(color: Colors.grey.shade300)
+                  ),
+                  child: Row(
+                    children: [
+                      SvgPicture.asset(AppIcons.termCondtionIcon),
+                      Gap(3.w),
+                      AppText(
+                        "End User License Agreement",
                         color: Colors.black87,
                         fontWeight: FontWeight.bold,
                       ),                      Spacer(),

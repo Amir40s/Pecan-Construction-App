@@ -84,10 +84,13 @@ class NotificationSettingController extends GetxController {
   }
 
   Future<void> openTermsAndConditions() async {
-    const urlString = "https://zeeshankhan2026.github.io/pecan-privacy-policy/"; // Replace with actual URL
+    const urlString = "https://zeeshankhan2026.github.io/terms-policy/"; // Replace with actual URL
     await _launchUrl(urlString);
   }
-
+  Future<void> openeula() async {
+    const urlString = "https://zeeshankhan2026.github.io/pecan-user-agreement/"; // Replace with actual URL
+    await _launchUrl(urlString);
+  }
   Future<void> _launchUrl(String urlString) async {
     final Uri url = Uri.parse(urlString);
     try {
