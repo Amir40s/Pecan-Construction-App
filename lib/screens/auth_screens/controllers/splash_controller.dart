@@ -4,40 +4,35 @@ import 'package:get/get.dart';
 import 'package:pecan_construction/config/routes/routes_name.dart';
 
 class Splash_Controller extends GetxController {
-
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
   Future<void> checkLogin() async {
-
     User? user = _auth.currentUser;
 
     if (user == null) {
-      Get.offAllNamed(RoutesName.splash);
+      // New user, navigate to role selection
+      Get.offAllNamed(RoutesName.RoleSelectionScreen);
       return;
     }
 
     String uid = user.uid;
 
-    /// Check Admin
-    final adminDoc =
-    await _firestore.collection("admins").doc(uid).get();
-
+    // Check if user is Admin
+    final adminDoc = await _firestore.collection("admins").doc(uid).get();
     if (adminDoc.exists) {
-      Get.offAll(RoutesName.BottomNavScreen);
+      Get.offAllNamed(RoutesName.BottomNavScreen); // Admin home
       return;
     }
 
-    /// Check Employee
-    final employeeDoc =
-    await _firestore.collection("employees").doc(uid).get();
-
+    // Check if user is Employee
+    final employeeDoc = await _firestore.collection("employees").doc(uid).get();
     if (employeeDoc.exists) {
-      Get.offAllNamed(RoutesName.EmployeeBottomNavScreen);
+      Get.offAllNamed(RoutesName.EmployeeBottomNavScreen); // Employee home
       return;
     }
 
-    /// fallback
-    Get.offAllNamed(RoutesName.splash);
+    // fallback: If user exists but not in Admin/Employee, ask role
+    Get.offAllNamed(RoutesName.RoleSelectionScreen);
   }
 }

@@ -162,7 +162,7 @@ class EmployeeSettingScreen extends StatelessWidget {
               const Gap(10),
               GestureDetector(
                 onTap: (){
-                  Get.toNamed(RoutesName.PrivacyPolicyScreen);
+                  notificationController.openPrivacyPolicy();
                 },
                 child: Container(
                   width: 95.w,
@@ -189,7 +189,7 @@ class EmployeeSettingScreen extends StatelessWidget {
               Gap(12),
               GestureDetector(
                 onTap: (){
-                  Get.toNamed(RoutesName.TermsConditionsScreen);
+                  notificationController.openTermsAndConditions();
                 },
                 child: Container(
                   width: 95.w,
