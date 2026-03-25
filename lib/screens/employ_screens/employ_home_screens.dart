@@ -45,7 +45,8 @@ class EmployHomeScreens extends GetView<EmployeeHomeController> {
                               placeholderAsset: AppImages.profileImage,
                               borderWidth: 3,
                               borderColor: Colors.white,
-                            )),
+                            )
+                        ),
                         SizedBox(width: 3.w),
                         Expanded(
                           child: Obx(
@@ -236,19 +237,15 @@ class EmployHomeScreens extends GetView<EmployeeHomeController> {
                                                   s.sitePhoto!
                                                       .trim()
                                                       .isNotEmpty)
-                                              ? Image.network(
-                                                  s.sitePhoto!,
-                                                  height: 120,
-                                                  fit: BoxFit.cover,
-                                                  errorBuilder: (_, __, ___) =>
-                                                      Container(
-                                                    height: 120,
-                                                    color: Colors.grey.shade200,
-                                                    alignment: Alignment.center,
-                                                    child: const Icon(Icons
-                                                        .image_not_supported),
-                                                  ),
-                                                )
+                                              ? AppNetworkImage(
+                                            url: s.sitePhoto!,
+                                            isCircle: false,
+                                            width: 25.w,
+                                            height: 24.w,
+                                            placeholderAsset: AppImages.profileImage,
+                                            borderWidth: 3,
+                                            borderColor: Colors.white,
+                                          )
                                               : Container(
                                                   height: 120,
                                                   decoration: BoxDecoration(

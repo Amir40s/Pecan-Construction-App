@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:pecan_construction/core/constant/app_images.dart';
 import 'package:pecan_construction/core/widgets/app_text.dart';
 import 'package:pecan_construction/screens/auth_screens/controllers/splash_controller.dart';
@@ -22,37 +23,40 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
-    skipOrShowSplash();
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      skipOrShowSplash();
+    });
   }
 
   void skipOrShowSplash() async {
-    User? user = FirebaseAuth.instance.currentUser;
+    final box = GetStorage();
 
+    // Check if admin previously logged in
+    final savedAdminEmail = box.read<String>('logged_in_admin_email');
+    if (savedAdminEmail != null) {
+      Get.offAllNamed(RoutesName.BottomNavScreen); // admin home
+      return;
+    }
+
+    // Check FirebaseAuth for employees
+    User? user = FirebaseAuth.instance.currentUser;
     if (user != null) {
-      // Already logged in, direct navigate without delay
       final uid = user.uid;
 
-      // Admin check
-      final adminDoc = await FirebaseFirestore.instance.collection("admins").doc(uid).get();
-      if (adminDoc.exists) {
-        Get.offAllNamed(RoutesName.BottomNavScreen);
-        return;
-      }
+      final employeeDoc = await FirebaseFirestore.instance
+          .collection("employees")
+          .doc(uid)
+          .get();
 
-      // Employee check
-      final employeeDoc = await FirebaseFirestore.instance.collection("employees").doc(uid).get();
       if (employeeDoc.exists) {
         Get.offAllNamed(RoutesName.EmployeeBottomNavScreen);
         return;
       }
-
-      // Fallback
-      Get.offAllNamed(RoutesName.RoleSelectionScreen);
-    } else {
-      // New user → show splash for 2 sec
-      await Future.delayed(Duration(seconds: 2));
-      await Splash_Controller().checkLogin();
     }
+
+    // If neither admin nor employee → role selection
+    Get.offAllNamed(RoutesName.RoleSelectionScreen);
   }
 
   @override

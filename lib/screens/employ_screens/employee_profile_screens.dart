@@ -94,7 +94,7 @@ class EmployeeProfileScreens extends GetView<SignUpController> {
 
                 SizedBox(height: 1.h),
 
-                // ✅ Name Title (live)
+                // Name Title (live)
                 Obx(() => AppText(
                   controller.employeeName.value.isNotEmpty
                       ? controller.employeeName.value

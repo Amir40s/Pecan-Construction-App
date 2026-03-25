@@ -19,7 +19,7 @@ class Splash_Controller extends GetxController {
     String uid = user.uid;
 
     // Check if user is Admin
-    final adminDoc = await _firestore.collection("admins").doc(uid).get();
+    final adminDoc = await _firestore.collection("admin").doc(uid).get();
     if (adminDoc.exists) {
       Get.offAllNamed(RoutesName.BottomNavScreen); // Admin home
       return;

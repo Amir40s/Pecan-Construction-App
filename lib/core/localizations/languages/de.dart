@@ -178,4 +178,7 @@ const Map<String, String> de = {
   "employee_photos": "Mitarbeiterfotos",
   "no_photos_yet": "Noch keine Fotos",
   "employee_photo": "Mitarbeiterfoto",
+
+  "end_user_license_agreement": "Endbenutzer-Lizenzvereinbarung",
+
 };

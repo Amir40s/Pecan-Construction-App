@@ -10,17 +10,20 @@ class RoleSelectionController extends GetxController {
     selectedRole.value = role;
   }
 
-  void continueNext() {
+  void continueNext() async {
     final role = selectedRole.value;
+
     if (role == null) {
       Get.snackbar("Select Role", "Please select a role to continue");
       return;
     }
 
+    await Future.delayed(const Duration(milliseconds: 100));
+
     if (role == AppRoleType.admin) {
-      Get.offAllNamed(RoutesName.adminLoginScreen); // change to your route
+      Get.offAllNamed(RoutesName.adminLoginScreen);
     } else {
-      Get.offAllNamed(RoutesName.login); //  change to your route
+      Get.offAllNamed(RoutesName.login);
     }
   }
 }

@@ -35,7 +35,6 @@ void main()  async{
   final NotificationService notificationService = NotificationService();
   await notificationService.setup();
 
-
   await translationService.init();
   runApp(const MyApp());
 }

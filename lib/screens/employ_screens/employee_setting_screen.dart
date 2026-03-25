@@ -231,7 +231,7 @@ class EmployeeSettingScreen extends StatelessWidget {
                       SvgPicture.asset(AppIcons.termCondtionIcon),
                       Gap(3.w),
                       AppText(
-                        "End User License Agreement",
+                        "end_user_license_agreement".tr,
                         color: Colors.black87,
                         fontWeight: FontWeight.bold,
                       ),                      Spacer(),

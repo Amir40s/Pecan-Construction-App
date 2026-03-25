@@ -107,7 +107,7 @@ class AdminLoginController extends GetxController {
           .collection("admin")
           .where("email", isEqualTo: email)
           .where("password", isEqualTo: password)
-          .limit(1)
+          .limit(10)
           .get();
 
       if (querySnapshot.docs.isNotEmpty) {
@@ -128,6 +128,8 @@ class AdminLoginController extends GetxController {
         selectedProfileImage.value = null;
 
         _saveAdminToStorage();
+        final box = GetStorage();
+        box.write('logged_in_admin_email', profileEmailC.text);
         update();
 
         Get.snackbar(
@@ -297,28 +299,36 @@ class AdminLoginController extends GetxController {
       isSavingProfile.value = false;
     }
   }
-
-  Future<void> logoutAdmin() async {
-    adminDocId.value = '';
-    adminName.value = '';
-    adminEmail.value = '';
-    adminProfileImage.value = '';
-
-    emailC.clear();
-    passwordC.clear();
-    profileNameC.clear();
-    profileEmailC.clear();
-
-    selectedProfileImage.value = null;
-    hasProfileChanges.value = false;
-    _initialName = '';
-    _initialImageUrl = '';
-
-    _clearAdminFromStorage();
-    update();
-
-    Get.offAllNamed(RoutesName.splash);
+  void logoutAdmin() {
+    final box = GetStorage();
+    box.remove('logged_in_admin_email');
+    Get.offAllNamed(RoutesName.RoleSelectionScreen);
   }
+
+  // Future<void> logoutAdmin() async {
+  //   final box = GetStorage();
+  //   box.remove('logged_in_admin_email');
+  //   Get.offAllNamed(RoutesName.RoleSelectionScreen);
+  //   adminDocId.value = '';
+  //   adminName.value = '';
+  //   adminEmail.value = '';
+  //   adminProfileImage.value = '';
+  //
+  //   emailC.clear();
+  //   passwordC.clear();
+  //   profileNameC.clear();
+  //   profileEmailC.clear();
+  //
+  //   selectedProfileImage.value = null;
+  //   hasProfileChanges.value = false;
+  //   _initialName = '';
+  //   _initialImageUrl = '';
+  //
+  //   _clearAdminFromStorage();
+  //   update();
+  //
+  //   Get.offAllNamed(RoutesName.splash);
+  // }
 
   @override
   void onClose() {

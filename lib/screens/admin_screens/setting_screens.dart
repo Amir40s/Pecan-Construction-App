@@ -6,6 +6,7 @@ import 'package:pecan_construction/config/routes/routes_name.dart';
 import 'package:pecan_construction/core/constant/app_icons.dart';
 import 'package:pecan_construction/core/widgets/app_buttons.dart';
 import 'package:pecan_construction/core/widgets/header_widget.dart';
+import 'package:pecan_construction/screens/employ_screens/controllers/adminLogincontroller.dart';
 import 'package:sizer/sizer.dart';
 import '../../core/localizations/locale_controller.dart';
 import '../../core/widgets/app_text.dart';
@@ -15,7 +16,7 @@ class SettingsScreen extends StatelessWidget {
    SettingsScreen({super.key});
 
   final notificationController = Get.put(NotificationSettingController());
-
+  final  adminC = Get.put(AdminLoginController());
   @override
   Widget build(BuildContext context) {
     final bg = const Color(0xFFF6F7FB);
@@ -267,7 +268,7 @@ class SettingsScreen extends StatelessWidget {
               AppButtonWidget(
                 prefixIcon: Icon(Icons.logout,color: Colors.white,),
                   onPressed: (){
-                  Get.offAllNamed(RoutesName.splash);
+                  adminC.logoutAdmin();
                   },
                   fontSize: 18,
                   fontWeight: FontWeight.w600,

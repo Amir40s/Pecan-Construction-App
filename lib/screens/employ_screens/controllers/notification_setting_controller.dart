@@ -88,7 +88,7 @@ class NotificationSettingController extends GetxController {
     await _launchUrl(urlString);
   }
   Future<void> openeula() async {
-    const urlString = "https://zeeshankhan2026.github.io/pecan-user-agreement/"; // Replace with actual URL
+    const urlString = "https://pecan-construction.netlify.app/user-agreement"; // Replace with actual URL
     await _launchUrl(urlString);
   }
   Future<void> _launchUrl(String urlString) async {
