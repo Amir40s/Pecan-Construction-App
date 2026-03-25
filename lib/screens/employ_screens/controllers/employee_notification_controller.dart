@@ -37,7 +37,7 @@ class EmployeeNotificationController extends GetxController {
         .toList();
   }
 
-  /// 🔴 REALTIME NOTIFICATIONS
+  ///  REALTIME NOTIFICATIONS
   void listenNotifications() {
 
     final uid = _auth.currentUser?.uid;
@@ -54,7 +54,7 @@ class EmployeeNotificationController extends GetxController {
 
         final data = doc.data();
 
-        final type = data['type'] == 'reminder'
+        final type = data['type'] == 'admin_notification'
             ? NotificationType.reminder
             : NotificationType.update;
 
@@ -82,13 +82,13 @@ class EmployeeNotificationController extends GetxController {
 
     markAsRead(item.id);
 
-    /// 🔴 Reminder → show dialog
+    ///  Reminder → show dialog
     if (item.type == NotificationType.reminder) {
       showReminderDialog(item);
       return;
     }
 
-    /// 🔵 Site notification → open site
+    ///  Site notification → open site
     if (item.siteId != null && item.siteId!.isNotEmpty) {
 
       Get.toNamed(
