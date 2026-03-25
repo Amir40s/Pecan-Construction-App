@@ -249,7 +249,10 @@ class EmployeeSitesScreen extends GetView<EmployeeSitesController> {
                                       // main action button
                                       InkWell(
                                         onTap: () {
-                                          Get.toNamed(RoutesName.EmployeeSiteDetailsScreen, arguments: site.siteId);
+                                          Get.toNamed(RoutesName.EmployeeSiteDetailsScreen,   arguments: {
+                                            "siteId": site.siteId,
+                                            "fromSitesScreen": true, // 👈 important
+                                          },);
                                         },
                                         borderRadius: BorderRadius.circular(12),
                                         child: Container(

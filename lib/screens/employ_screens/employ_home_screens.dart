@@ -216,7 +216,10 @@ class EmployHomeScreens extends GetView<EmployeeHomeController> {
 
                                                 Get.toNamed(
                                                   RoutesName.EmployeeSiteDetailsScreen,
-                                                  arguments: {"siteId": s.siteId},
+                                                  arguments: {
+                                                    "siteId": s.siteId,
+                                                    "fromSitesScreen": false, //  or just don't send
+                                                  },
                                                 );
                                               },
                                               text: buttonText,

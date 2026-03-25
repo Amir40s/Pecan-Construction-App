@@ -7,6 +7,7 @@ import 'package:get_storage/get_storage.dart';
 import 'package:url_launcher/url_launcher.dart'; // <-- Make sure to add this in pubspec.yaml
 
 import '../../../config/routes/routes_name.dart';
+import 'adminLogincontroller.dart';
 
 class NotificationSettingController extends GetxController {
   final box = GetStorage();
@@ -16,6 +17,7 @@ class NotificationSettingController extends GetxController {
 
   final FirebaseFirestore firestore = FirebaseFirestore.instance;
   final FirebaseAuth auth = FirebaseAuth.instance;
+  final  adminC = Get.put(AdminLoginController());
 
   @override
   void onInit() {
@@ -47,33 +49,36 @@ class NotificationSettingController extends GetxController {
     }
   }
 
-  Future<void> deleteAccount() async {
-    log("deleting account");
+
+  Future<void> deleteAdminAccount() async {
+    log("deleting admin account");
     isLogging.value = true;
 
     try {
-      User? user = FirebaseAuth.instance.currentUser;
-      if (user == null) return;
+      final query = await firestore
+          .collection("admin")
+          .where("email", isEqualTo: adminC.adminEmail.toString())
+          .get();
 
-      String uid = user.uid;
+      for (var doc in query.docs) {
+        await firestore.collection("admin").doc(doc.id).delete();
+      }
+      final box = GetStorage();
+      box.remove('logged_in_admin_email');
+      Get.offAllNamed(RoutesName.RoleSelectionScreen);
 
-      await firestore.collection("users").doc(uid).delete();
-      await user.delete();
-
-      Get.offAllNamed(RoutesName.splash);
     } catch (e) {
-      log("Delete account error: $e");
+      log("Delete admin error: $e");
 
       Get.snackbar(
         "Error",
-        "Failed to delete account",
+        "Failed to delete admin account",
         snackPosition: SnackPosition.BOTTOM,
       );
     } finally {
       isLogging.value = false;
     }
   }
-
   /// -------------------------
   /// New methods for URLs
   /// -------------------------

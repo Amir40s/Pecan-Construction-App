@@ -12,9 +12,11 @@ import 'controllers/employee_site_details_controller.dart';
 
 class EmployeeSiteDetailsScreen extends GetView<EmployeeSiteDetailsController> {
    EmployeeSiteDetailsScreen({super.key});
-  final args = Get.arguments;
+   final args = Get.arguments ?? {};
   @override
   Widget build(BuildContext context) {
+    final bool fromSitesScreen = args["fromSitesScreen"] ?? false;
+
     final bg = const Color(0xFFF6F7FB);
     final card = Colors.white;
     final textPrimary = const Color(0xFF111827);
@@ -197,31 +199,35 @@ class EmployeeSiteDetailsScreen extends GetView<EmployeeSiteDetailsController> {
                     const SizedBox(height: 14),
 
                     // Attachments header
-                    Row(
-                      children: [
-                        AppText(
-                          "attachments".tr,
-                          color: textPrimary,
-                          fontSize: 16,
-                          fontWeight: FontWeight.w800,
-                        ),
-                        const Spacer(),
+                  Row(
+                    children: [
+                      AppText(
+                        "attachments".tr,
+                        color: textPrimary,
+                        fontSize: 16,
+                        fontWeight: FontWeight.w800,
+                      ),
+                      const Spacer(),
+
+                      if (!fromSitesScreen) //  condition
                         InkWell(
-                          onTap: (){
-                            print(args["siteId"]);
-                           Get.toNamed(RoutesName.AttachmentsScreen, arguments: {
-                             "siteId" : args["siteId"],
-                           });
+                          onTap: () {
+                            Get.toNamed(
+                              RoutesName.AttachmentsScreen,
+                              arguments: {
+                                "siteId": args["siteId"],
+                              },
+                            );
                           },
-                          child:AppText(
+                          child: AppText(
                             "see_all".tr,
                             color: const Color(0xffC22522),
                             fontSize: 14,
                             fontWeight: FontWeight.w800,
                           ),
                         ),
-                      ],
-                    ),
+                    ],
+                  ),
 
                     const SizedBox(height: 10),
 

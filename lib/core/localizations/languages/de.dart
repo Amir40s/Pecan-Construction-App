@@ -180,5 +180,6 @@ const Map<String, String> de = {
   "employee_photo": "Mitarbeiterfoto",
 
   "end_user_license_agreement": "Endbenutzer-Lizenzvereinbarung",
+  "delete_account": "Konto löschen",
 
 };

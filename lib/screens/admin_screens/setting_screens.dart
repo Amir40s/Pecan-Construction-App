@@ -17,6 +17,7 @@ class SettingsScreen extends StatelessWidget {
 
   final notificationController = Get.put(NotificationSettingController());
   final  adminC = Get.put(AdminLoginController());
+
   @override
   Widget build(BuildContext context) {
     final bg = const Color(0xFFF6F7FB);
@@ -250,7 +251,7 @@ class SettingsScreen extends StatelessWidget {
                   return AppButtonWidget(
                     prefixIcon: Icon(Icons.delete,color: Colors.white,),
                       onPressed: (){
-                     notificationController.deleteAccount();
+                     notificationController.deleteAdminAccount();
                       },
                       fontSize: 18,
                     loader: notificationController.isLogging.value,
@@ -259,7 +260,7 @@ class SettingsScreen extends StatelessWidget {
                       width: 95.w,
                       height: 6.h,
                       buttonColor: Color(0xffC22522),
-                    text: "Delete Account".tr,);
+                    text: "delete_account".tr,);
                 }
               ),
               const Gap(22),

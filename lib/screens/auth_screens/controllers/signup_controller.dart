@@ -1,5 +1,7 @@
+import 'dart:developer';
 import 'dart:io';
 import 'dart:typed_data';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/cupertino.dart';
@@ -19,6 +21,8 @@ class SignUpController extends GetxController {
   final nameC = TextEditingController();
   final emailC = TextEditingController();
   final passwordC = TextEditingController();
+  final FirebaseFirestore firestore = FirebaseFirestore.instance;
+
 
   RxBool isPasswordVisible = false.obs;
   RxBool isLoading = false.obs;
@@ -29,6 +33,7 @@ class SignUpController extends GetxController {
 
   // UI state
   final isUploading = false.obs;
+  final isLogging= false.obs;
   final avatarUrl = "".obs;
   final originalName = "".obs;
   final currentName = "".obs; // Added to make hasChanges reactive to typing
@@ -100,7 +105,7 @@ class SignUpController extends GetxController {
 
       if (kIsWeb) {
         pickedBytes.value = await x.readAsBytes();
-        pickedFile = null; // ✅ fix: "=" hona chahiye, "==" nahi
+        pickedFile = null; // fix: "=" hona chahiye, "==" nahi
       } else {
         pickedFile = File(x.path);
         pickedBytes.value = await x.readAsBytes(); // preview ke liye
@@ -237,6 +242,32 @@ class SignUpController extends GetxController {
     }
     finally{
       isLogginOut.value = true;
+    }
+  }
+  Future<void> deleteAccount() async {
+    log("deleting account");
+    isLogging.value = true;
+
+    try {
+      User? user = FirebaseAuth.instance.currentUser;
+      if (user == null) return;
+
+      String uid = user.uid;
+
+      await firestore.collection("employees").doc(uid).delete();
+      await user.delete();
+
+      Get.offAllNamed(RoutesName.splash);
+    } catch (e) {
+      log("Delete account error: $e");
+
+      Get.snackbar(
+        "Error",
+        "Failed to delete account",
+        snackPosition: SnackPosition.BOTTOM,
+      );
+    } finally {
+      isLogging.value = false;
     }
   }
 }

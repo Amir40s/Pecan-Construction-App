@@ -246,16 +246,16 @@ class EmployeeSettingScreen extends StatelessWidget {
                 return AppButtonWidget(
                   prefixIcon: Icon(Icons.delete,color: Colors.white,),
                   onPressed: (){
-                    notificationController.deleteAccount();
+                    c.deleteAccount();
                   },
                   fontSize: 18,
-                  loader: notificationController.isLogging.value,
+                  loader: c.isLogging.value,
 
                   fontWeight: FontWeight.w600,
                   width: 95.w,
                   height: 6.h,
                   buttonColor: Color(0xffC22522),
-                  text: "Delete Account".tr,);
+                  text: "delete_account".tr,);
               }
               ),
               const Gap(22),

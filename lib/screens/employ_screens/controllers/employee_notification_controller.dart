@@ -42,7 +42,6 @@ class EmployeeNotificationController extends GetxController {
 
     final uid = _auth.currentUser?.uid;
     if (uid == null) return;
-
     _firestore
         .collection("notifications")
         .where("userId", isEqualTo: uid)

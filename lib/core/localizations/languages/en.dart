@@ -179,5 +179,5 @@ const Map<String, String> en = {
   "employee_photo": "Employee Photo",
 
   "end_user_license_agreement": "End User License Agreement",
-
+  "delete_account": "Delete Account",
 };
