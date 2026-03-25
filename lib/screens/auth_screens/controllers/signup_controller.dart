@@ -236,12 +236,12 @@ class SignUpController extends GetxController {
       Get.offAllNamed(RoutesName.splash);
     }
     catch (e){
-      isLogginOut.value = true;
+      isLogginOut.value = false;
       Get.snackbar("error", e.toString());
 
     }
     finally{
-      isLogginOut.value = true;
+      isLogginOut.value = false;
     }
   }
   Future<void> deleteAccount() async {

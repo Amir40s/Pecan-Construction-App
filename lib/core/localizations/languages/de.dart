@@ -182,4 +182,10 @@ const Map<String, String> de = {
   "end_user_license_agreement": "Endbenutzer-Lizenzvereinbarung",
   "delete_account": "Konto löschen",
 
+  "enter_full_name": "Vollständigen Namen eingeben",
+  "confirm_delete": "Bestätigen",
+  "are_you_sure_delete_account": "Sind Sie sicher, dass Sie Ihr Konto löschen möchten?",
+  "delete": "Löschen",
+  "confirm_logout": "Bestätigen",
+  "are_you_sure_logout": "Möchten Sie sich wirklich abmelden?",
 };

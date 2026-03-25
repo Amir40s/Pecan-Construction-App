@@ -247,36 +247,60 @@ class SettingsScreen extends StatelessWidget {
               const Gap(22),
 
               // Logout button
-              Obx( () {
-                  return AppButtonWidget(
-                    prefixIcon: Icon(Icons.delete,color: Colors.white,),
-                      onPressed: (){
-                     notificationController.deleteAdminAccount();
-                      },
-                      fontSize: 18,
-                    loader: notificationController.isLogging.value,
-
-                    fontWeight: FontWeight.w600,
-                      width: 95.w,
-                      height: 6.h,
-                      buttonColor: Color(0xffC22522),
-                    text: "delete_account".tr,);
-                }
-              ),
+            Obx(() {
+              return AppButtonWidget(
+                prefixIcon: Icon(Icons.delete, color: Colors.white),
+                onPressed: () {
+                  Get.defaultDialog(
+                    title: "confirm_delete".tr,
+                    middleText: "are_you_sure_delete_account".tr,
+                    textCancel: "cancel".tr,
+                    textConfirm: "delete".tr,
+                    confirmTextColor: Colors.white,
+                    buttonColor: Color(0xffC22522),
+                    onConfirm: () {
+                      Get.back(); // close dialog
+                      notificationController.deleteAdminAccount();
+                    },
+                    onCancel: () {},
+                  );
+                },
+                fontSize: 18,
+                loader: notificationController.isLogging.value,
+                fontWeight: FontWeight.w600,
+                width: 95.w,
+                height: 6.h,
+                buttonColor: Color(0xffC22522),
+                text: "delete_account".tr,
+              );
+            }),
               const Gap(22),
 
               // Logout button
               AppButtonWidget(
-                prefixIcon: Icon(Icons.logout,color: Colors.white,),
-                  onPressed: (){
-                  adminC.logoutAdmin();
-                  },
-                  fontSize: 18,
-                  fontWeight: FontWeight.w600,
-                  width: 95.w,
-                  height: 6.h,
-                  buttonColor: Color(0xffC22522),
-                text: "logout".tr,),
+                prefixIcon: Icon(Icons.logout, color: Colors.white),
+                onPressed: () {
+                  Get.defaultDialog(
+                    title: "confirm_logout".tr,
+                    middleText: "are_you_sure_logout".tr,
+                    textCancel: "cancel".tr,
+                    textConfirm: "logout".tr,
+                    confirmTextColor: Colors.white,
+                    buttonColor: Color(0xffC22522),
+                    onConfirm: () {
+                      Get.back(); // close dialog
+                      adminC.logoutAdmin();
+                    },
+                    onCancel: () {},
+                  );
+                },
+                fontSize: 18,
+                fontWeight: FontWeight.w600,
+                width: 95.w,
+                height: 6.h,
+                buttonColor: Color(0xffC22522),
+                text: "logout".tr,
+              ),
             ],
           ),
         ),

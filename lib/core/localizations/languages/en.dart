@@ -180,4 +180,12 @@ const Map<String, String> en = {
 
   "end_user_license_agreement": "End User License Agreement",
   "delete_account": "Delete Account",
+  "enter_full_name": "Enter full name",
+  "confirm_delete": "Confirm",
+  "are_you_sure_delete_account": "Are you sure you want to delete your account?",
+
+  "delete": "Delete",
+  "confirm_logout": "Confirm",
+  "are_you_sure_logout": "Are you sure you want to logout?",
+
 };
