@@ -249,7 +249,7 @@ class SignUpController extends GetxController {
     isLogging.value = true;
 
     try {
-      User? user = FirebaseAuth.instance.currentUser;
+      User? user = FirebaseAuth.instance.currentUser.delete();
       if (user == null) return;
 
       String uid = user.uid;
