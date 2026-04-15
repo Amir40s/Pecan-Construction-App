@@ -30,16 +30,16 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   void skipOrShowSplash() async {
+    await Future.delayed(const Duration(seconds: 3));
+
     final box = GetStorage();
 
-    // Check if admin previously logged in
     final savedAdminEmail = box.read<String>('logged_in_admin_email');
     if (savedAdminEmail != null) {
-      Get.offAllNamed(RoutesName.BottomNavScreen); // admin home
+      Get.offAllNamed(RoutesName.BottomNavScreen);
       return;
     }
 
-    // Check FirebaseAuth for employees
     User? user = FirebaseAuth.instance.currentUser;
     if (user != null) {
       final uid = user.uid;
@@ -55,7 +55,6 @@ class _SplashScreenState extends State<SplashScreen> {
       }
     }
 
-    // If neither admin nor employee → role selection
     Get.offAllNamed(RoutesName.RoleSelectionScreen);
   }
 
