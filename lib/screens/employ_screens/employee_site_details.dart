@@ -93,10 +93,7 @@ class EmployeeSiteDetailsScreen extends GetView<EmployeeSiteDetailsController> {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     AppText(
-                                     "ABC Testing ",
-                                      color: textPrimary,
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.w800,
+                                     controller.siteAddress.value, type: AppTextType.heading3,
                                     ),
                                     const SizedBox(height: 2),
                                     InkWell(
@@ -113,8 +110,7 @@ class EmployeeSiteDetailsScreen extends GetView<EmployeeSiteDetailsController> {
                               ),
 
                               InkWell(
-                                onTap: (){
-                                },
+                                onTap: controller.onTapOpenInMaps,
                                 child: Container(
                                   width: 34,
                                   height: 34,
@@ -131,16 +127,18 @@ class EmployeeSiteDetailsScreen extends GetView<EmployeeSiteDetailsController> {
                               ),
                             ],
                           ),
-
                           const SizedBox(height: 10),
 
-                          ClipRRect(
-                            borderRadius: BorderRadius.circular(14),
-                            child: AspectRatio(
-                              aspectRatio: 16 / 9,
-                              child:  Image.asset(
-                                AppImages.GoogleMapImage,
-                                fit: BoxFit.cover,
+                          GestureDetector(
+                            onTap: controller.onTapOpenInMaps,
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(14),
+                              child: AspectRatio(
+                                aspectRatio: 16 / 9,
+                                child:  Image.asset(
+                                  AppImages.GoogleMapImage,
+                                  fit: BoxFit.cover,
+                                ),
                               ),
                             ),
                           ),

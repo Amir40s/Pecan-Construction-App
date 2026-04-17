@@ -18,9 +18,6 @@ class CreateSiteController extends GetxController {
   final FirebaseStorage _storage = FirebaseStorage.instance;
   final ImagePicker _imagePicker = ImagePicker();
 
-  /// -----------------------------
-  /// Screen 1 fields
-  /// -----------------------------
   final siteNameC = TextEditingController();
   final siteAddressC = TextEditingController();
   final siteNoteC = TextEditingController();
@@ -33,37 +30,26 @@ class CreateSiteController extends GetxController {
   final RxnDouble lat = RxnDouble();
   final RxnDouble lng = RxnDouble();
 
-  /// -----------------------------
-  /// Screen 2 fields
-  /// -----------------------------
+
   final RxList<String> assignedEmployeeIds = <String>[].obs;
   final RxMap<String, dynamic> employeeRoles = <String, dynamic>{}.obs;
 
   final RxList<Map<String, dynamic>> assignedEmployeesPreview =
       <Map<String, dynamic>>[].obs;
 
-  /// -----------------------------
-  /// Screen 3 fields
-  /// local pending attachments
-  /// -----------------------------
+
   final RxList<File> pendingImageAttachments = <File>[].obs;
   final RxList<PlatformFile> pendingFileAttachments = <PlatformFile>[].obs;
 
-  /// Uploaded/ready attachments for model
   final RxList<Map<String, dynamic>> siteAttachments =
       <Map<String, dynamic>>[].obs;
 
-  /// -----------------------------
-  /// states
-  /// -----------------------------
   final RxBool isSaving = false.obs;
   final RxBool isPickingMainImage = false.obs;
   final RxBool isPickingAttachments = false.obs;
   final RxDouble uploadProgress = 0.0.obs;
 
-  /// -----------------------------
-  /// setters
-  /// -----------------------------
+
   void setStatus(String value) {
     selectedStatus.text = value.trim();
   }
@@ -78,7 +64,7 @@ class CreateSiteController extends GetxController {
     final DateTime? picked = await showDatePicker(
       context: context,
       initialDate: now,
-      firstDate: DateTime(now.year, now.month, now.day), // past dates disabled
+      firstDate: DateTime(now.year, now.month, now.day),
       lastDate: DateTime(2100),
     );
 
@@ -98,9 +84,7 @@ class CreateSiteController extends GetxController {
     lng.value = longitude;
   }
 
-  /// -----------------------------
-  /// main image pick
-  /// -----------------------------
+
   Future<void> pickMainImageFromGallery() async {
     try {
       isPickingMainImage.value = true;
@@ -143,9 +127,7 @@ class CreateSiteController extends GetxController {
     selectedSiteImage.value = null;
   }
 
-  /// -----------------------------
-  /// employees
-  /// -----------------------------
+
   void addAssignedEmployee({
     required String employeeId,
     required String name,
@@ -188,9 +170,7 @@ class CreateSiteController extends GetxController {
     );
   }
 
-  /// -----------------------------
-  /// attachment pickers
-  /// -----------------------------
+
   Future<void> pickAttachmentImagesFromGallery() async {
     try {
       isPickingAttachments.value = true;
@@ -251,7 +231,6 @@ class CreateSiteController extends GetxController {
   List<AttachmentModel> get attachmentPreviewList {
     final List<AttachmentModel> items = [];
 
-    /// pending picked images
     for (final file in pendingImageAttachments) {
       final bytes = file.existsSync() ? file.lengthSync() : 0;
 
@@ -265,7 +244,6 @@ class CreateSiteController extends GetxController {
       );
     }
 
-    /// pending picked files
     for (final file in pendingFileAttachments) {
       final ext = p.extension(file.name).replaceFirst('.', '').toLowerCase();
 
@@ -337,9 +315,7 @@ class CreateSiteController extends GetxController {
     }
   }
 
-  /// -----------------------------
-  /// validation
-  /// -----------------------------
+
   bool validateStepOne() {
     if (siteNameC.text.trim().isEmpty) {
       Get.snackbar("Error", "Site name is required");
@@ -369,9 +345,6 @@ class CreateSiteController extends GetxController {
     return true;
   }
 
-  /// -----------------------------
-  /// storage helpers
-  /// -----------------------------
   String _safeFileName(String value) {
     return value
         .trim()
@@ -508,9 +481,7 @@ class CreateSiteController extends GetxController {
     return uploaded;
   }
 
-  /// -----------------------------
-  /// build model
-  /// -----------------------------
+
   SitesModel buildSiteModel({
     required String docId,
     String? uploadedSitePhotoUrl,
@@ -535,9 +506,6 @@ class CreateSiteController extends GetxController {
     );
   }
 
-  /// -----------------------------
-  /// save
-  /// -----------------------------
   Future<void> saveSite() async {
     if (!validateBeforeSave()) return;
 
@@ -575,9 +543,6 @@ class CreateSiteController extends GetxController {
     }
   }
 
-  /// -----------------------------
-  /// clear/reset
-  /// -----------------------------
   void clearAllFields() {
     siteNameC.clear();
     siteAddressC.clear();

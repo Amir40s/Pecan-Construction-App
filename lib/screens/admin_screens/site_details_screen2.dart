@@ -111,35 +111,41 @@ class SiteDetailsScreen_2 extends StatelessWidget {
                             ),
                             SizedBox(width: 3.w),
                             Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  AppText(
-                                    controller.siteAddress.value.isEmpty
-                                        ? "no_address".tr
-                                        : controller.siteAddress.value,
-                                    color: textPrimary,
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.w700,
-                                  ),
-                                  AppText(
-                                    controller.openInMapsText.value,
-                                    fontSize: 12,
-                                    color: Colors.grey.shade700,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ],
+                              child: GestureDetector(
+                                onTap: controller.onTapOpenInMaps,
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    AppText(
+                                      controller.siteAddress.value.isEmpty
+                                          ? "no_address".tr
+                                          : controller.siteAddress.value,
+                                      color: textPrimary,
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.w700,
+                                    ),
+                                    AppText(
+                                      controller.openInMapsText.value,
+                                      fontSize: 12,
+                                      color: Colors.grey.shade700,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ],
+                                ),
                               ),
                             ),
-                            Container(
-                              height: 8.h,
-                              width: 8.w,
-                              decoration: BoxDecoration(
-                                color: Colors.grey.shade300,
-                                shape: BoxShape.circle,
-                              ),
-                              child: const Center(
-                                child: Icon(Icons.arrow_right_sharp),
+                            GestureDetector(
+                              onTap: controller.onTapOpenInMaps,
+                              child: Container(
+                                height: 8.h,
+                                width: 8.w,
+                                decoration: BoxDecoration(
+                                  color: Colors.grey.shade300,
+                                  shape: BoxShape.circle,
+                                ),
+                                child: const Center(
+                                  child: Icon(Icons.arrow_right_sharp),
+                                ),
                               ),
                             ),
                           ],
@@ -148,14 +154,17 @@ class SiteDetailsScreen_2 extends StatelessWidget {
 
                       SizedBox(height: 2.h),
 
-                      ClipRRect(
-                        borderRadius: BorderRadius.circular(14),
-                        child: AspectRatio(
-                          aspectRatio: 12 / 9,
-                          child: AppNetworkImage(
-                            url: "",
-                            fit: BoxFit.cover,
-                            placeholderAsset: AppImages.GoogleMapImage,
+                      GestureDetector(
+                        onTap: controller.onTapOpenInMaps,
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(14),
+                          child: AspectRatio(
+                            aspectRatio: 12 / 9,
+                            child: AppNetworkImage(
+                              url: "",
+                              fit: BoxFit.cover,
+                              placeholderAsset: AppImages.GoogleMapImage,
+                            ),
                           ),
                         ),
                       ),

@@ -6,6 +6,7 @@ import 'package:pecan_construction/core/widgets/app_buttons.dart';
 import 'package:pecan_construction/core/widgets/app_text.dart';
 import 'package:pecan_construction/core/widgets/header_widget.dart';
 import 'package:pecan_construction/screens/admin_screens/admin_controller/create_site_controller.dart';
+import 'package:pecan_construction/screens/admin_screens/pick_location_screen.dart';
 import 'package:sizer/sizer.dart';
 
 import '../../core/constant/app_icons.dart';
@@ -91,6 +92,20 @@ class CreateSiteScreen extends GetView<CreateSiteController> {
                 ),
                 SizedBox(height: 1.h),
                 AppFormField(
+                  onTap: () async {
+                    final result = await Get.to(() => const PickLocationScreen());
+
+                    if (result != null) {
+                      controller.siteAddressC.text = result['address'] ?? "";
+
+                      controller.setCoordinates(
+                        latitude: result['lat'],
+                        longitude: result['lng'],
+                      );
+                    }
+                  },
+                  readOnly: true,
+
                   iconWidget: SvgPicture.asset(AppIcons.pointLocationIcon),
                   title: "site_address_hint".tr,
                   textEditingController: controller.siteAddressC,

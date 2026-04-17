@@ -7,6 +7,7 @@ import 'package:open_filex/open_filex.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../../../config/routes/routes_name.dart';
 import '../../../core/models/attaichment_model.dart';
 import '../../../core/models/site_model.dart';
@@ -21,13 +22,15 @@ class EmployeeSiteDetailsController extends GetxController {
   final RxString siteTitle = "".obs;
   final RxString openInMapsText = "Open in Maps".obs;
 
-  // final RxString mapPreviewPathOrUrl = AppImages.googleMapPreview.obs; // apna asset
   final RxBool isMapNetwork = false.obs;
 
   final RxList<String> assignedStaff = <String>[].obs;
   final RxString siteDescription = "".obs;
   final RxString siteNote = "".obs;
   final RxString siteStatus = "".obs;
+  final RxString siteAddress = "".obs;
+  final RxDouble lat = 0.0.obs;
+  final RxDouble long = 0.0.obs;
 
   final RxList<SiteAttachment> attachments = <SiteAttachment>[].obs;
 
@@ -98,15 +101,13 @@ class EmployeeSiteDetailsController extends GetxController {
         siteDescription.value = site.siteDescription ?? "";
         siteNote.value = site.siteNote ?? "";
         siteStatus.value = site.siteStatus ?? "";
-
-        //  map preview (for now use asset, later static map url bana sakte)
-        // mapPreviewPathOrUrl.value = AppImages.googleMapPreview;
+        lat.value = site.lat!;
+        long.value = site.lng!;
+        siteAddress.value = site.siteAddress;
         isMapNetwork.value = false;
 
-        //  attachments map
         attachments.assignAll(_mapAttachments(site.siteAttachments));
 
-        //  assigned staff: fetch employee names from employees collection
         await _bindAssignedEmployees(
           ids: site.assignedEmployeeIds,
           roleMap: site.employeeRoles,
@@ -135,7 +136,6 @@ class EmployeeSiteDetailsController extends GetxController {
 
       AttachmentType type;
 
-      /// Detect file type
       if (ext == "pdf" || mime.contains("pdf")) {
         type = AttachmentType.pdf;
       }
@@ -161,7 +161,6 @@ class EmployeeSiteDetailsController extends GetxController {
           type: type,
           url: url,
 
-          /// Thumbnail only for images
           thumbPathOrUrl: type == AttachmentType.image ? url : null,
           isThumbNetwork: type == AttachmentType.image,
         ),
@@ -225,9 +224,55 @@ class EmployeeSiteDetailsController extends GetxController {
     }
   }
 
-  // -------- actions --------
-  void onTapOpenInMaps() {
-    // yahan lat/lng se launch url bana do jab aap launchUrl use kar rahe hon
+
+  Future<void> onTapOpenInMaps() async {
+    try {
+      final latitude = lat.value;
+      final longitude = long.value;
+
+      if (latitude == 0.0 && longitude == 0.0) {
+        Get.snackbar("Error", "Location not found");
+        return;
+      }
+
+      Uri googleMapsUrl;
+
+      if (GetPlatform.isAndroid) {
+        googleMapsUrl = Uri.parse(
+          "geo:$latitude,$longitude?q=$latitude,$longitude",
+        );
+      }
+
+      else if (GetPlatform.isIOS) {
+        googleMapsUrl = Uri.parse(
+          "comgooglemaps://?q=$latitude,$longitude",
+        );
+      }
+
+      else {
+        googleMapsUrl = Uri.parse(
+          "https://www.google.com/maps/search/?api=1&query=$latitude,$longitude",
+        );
+      }
+
+      if (await canLaunchUrl(googleMapsUrl)) {
+        await launchUrl(
+          googleMapsUrl,
+          mode: LaunchMode.externalApplication,
+        );
+      } else {
+        final webUrl = Uri.parse(
+          "https://www.google.com/maps/search/?api=1&query=$latitude,$longitude",
+        );
+
+        await launchUrl(
+          webUrl,
+          mode: LaunchMode.externalApplication,
+        );
+      }
+    } catch (e) {
+      Get.snackbar("Error", e.toString());
+    }
   }
 
   void onTapSeeAllAttachments() {

@@ -5,6 +5,8 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" android:maxSdkVersion="28"/>
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
     <uses-permission android:name="android.permission.WAKE_LOCK"/>
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
 
     <application
         android:label="pecan_construction"
@@ -35,6 +37,10 @@
         <meta-data
             android:name="flutterEmbedding"
             android:value="2"/>
+
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyCszQ7wLIITsDBibcqVvDHIxTV8sEhxZ58"/>
 
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_channel_id"

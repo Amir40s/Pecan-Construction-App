@@ -7,23 +7,19 @@ class SitesModel {
   final String siteStatus;
   final String? siteNote;
 
-  /// ✅ NEW FIELD
+
   final String? siteDescription;
 
   final String? sitePhoto;
   final String? siteStartDate;
 
-  /// Google map
   final double? lat;
   final double? lng;
 
-  /// Fast query
   final List<String> assignedEmployeeIds;
 
-  /// roles map: { uid: "Engineer" }
   final Map<String, dynamic> employeeRoles;
 
-  /// attachments: [{name, ext, mimeType, url, size?}]
   final List<Map<String, dynamic>> siteAttachments;
 
   final Timestamp? createdAt;

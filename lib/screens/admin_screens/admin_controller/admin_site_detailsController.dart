@@ -7,6 +7,7 @@ import 'package:open_filex/open_filex.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../../../config/routes/routes_name.dart';
 import '../../../core/constant/app_icons.dart';
 import '../../../core/models/attaichment_model.dart';
@@ -22,11 +23,12 @@ class AdminSiteDetailsController extends GetxController {
   final RxString siteTitle = "".obs;
   final RxString openInMapsText = "Open in Maps".obs;
 
-  // final RxString mapPreviewPathOrUrl = AppImages.googleMapPreview.obs; // apna asset
   final RxBool isMapNetwork = false.obs;
 
   final RxList<String> assignedStaff = <String>[].obs;
   final RxString siteDescription = "".obs;
+  final RxDouble lat = 0.0.obs;
+  final RxDouble long = 0.0.obs;
 
   final RxList<SiteAttachment> attachments = <SiteAttachment>[].obs;
 
@@ -112,6 +114,8 @@ class AdminSiteDetailsController extends GetxController {
         );
         siteStatus.value = site.siteStatus;
         siteAddress.value = site.siteAddress;
+        lat.value = site.lat!;
+        long.value = site.lng!;
 
         isLoading.value = false;
       },
@@ -287,10 +291,55 @@ class AdminSiteDetailsController extends GetxController {
   }
 
   // -------- actions --------
-  void onTapOpenInMaps() {
-    // yahan lat/lng se launch url bana do jab aap launchUrl use kar rahe hon
-  }
+  Future<void> onTapOpenInMaps() async {
+    try {
+      final latitude = lat.value;
+      final longitude = long.value;
 
+      if (latitude == 0.0 && longitude == 0.0) {
+        Get.snackbar("Error", "Location not found");
+        return;
+      }
+
+      Uri googleMapsUrl;
+
+      if (GetPlatform.isAndroid) {
+        googleMapsUrl = Uri.parse(
+          "geo:$latitude,$longitude?q=$latitude,$longitude",
+        );
+      }
+
+      else if (GetPlatform.isIOS) {
+        googleMapsUrl = Uri.parse(
+          "comgooglemaps://?q=$latitude,$longitude",
+        );
+      }
+
+      else {
+        googleMapsUrl = Uri.parse(
+          "https://www.google.com/maps/search/?api=1&query=$latitude,$longitude",
+        );
+      }
+
+      if (await canLaunchUrl(googleMapsUrl)) {
+        await launchUrl(
+          googleMapsUrl,
+          mode: LaunchMode.externalApplication,
+        );
+      } else {
+        final webUrl = Uri.parse(
+          "https://www.google.com/maps/search/?api=1&query=$latitude,$longitude",
+        );
+
+        await launchUrl(
+          webUrl,
+          mode: LaunchMode.externalApplication,
+        );
+      }
+    } catch (e) {
+      Get.snackbar("Error", e.toString());
+    }
+  }
   void onTapSeeAllAttachments() {
     Get.toNamed(RoutesName.AttachmentsScreen);
   }

@@ -13,6 +13,12 @@
     <key>NSPhotoLibraryAddUsageDescription</key>
     <string>This app needs permission to save photos to your gallery.</string>
 
+    <key>NSLocationWhenInUseUsageDescription</key>
+    <string>We need your location to show current position on map.</string>
+
+    <key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+    <string>We need your location to show current position on map.</string>
+
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleDisplayName</key>
