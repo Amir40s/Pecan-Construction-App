@@ -12,8 +12,7 @@ class PickLocationScreen extends StatefulWidget {
       _PickLocationScreenState();
 }
 
-class _PickLocationScreenState
-    extends State<PickLocationScreen> {
+class _PickLocationScreenState extends State<PickLocationScreen> {
 
   GoogleMapController? mapController;
 
